@@ -2,7 +2,6 @@ require 'aws-sdk'
 require 'awspec'
 require 'ostruct'
 
-require_relative '../awspec'
 require_relative '../terraform_module'
 
 shared_context :terraform do
