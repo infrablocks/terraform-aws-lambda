@@ -2,7 +2,6 @@ variable "region" {}
 variable "component" {}
 variable "deployment_identifier" {}
 
-
 variable "account_id" {}
 
 variable "lambda_zip_path" {}
