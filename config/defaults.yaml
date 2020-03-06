@@ -9,9 +9,11 @@ configuration_directory: "%{hiera('work_directory')}/%{hiera('source_directory')
 private_zone_id: 'Z2CDAFD23Q10HO'
 
 vpc_cidr: "10.1.0.0/16"
-availability_zones: 'eu-west-2a,eu-west-2b'
+availability_zones:
+  - "eu-west-2a"
+  - "eu-west-2b"
 
-account_id: 579878096224
+account_id: "579878096224"
 
 lambda_zip_path: 'lambda.zip'
 lambda_ingress_cidr_blocks:
