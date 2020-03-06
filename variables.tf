@@ -15,23 +15,23 @@ variable "vpc_id" {
 
 variable "lambda_subnet_ids" {
   description = "Subnet ids to deploy the lambda to"
-  type = "list"
+  type = list(string)
 }
 
 
 variable "lambda_zip_path" {}
 
 variable "lambda_ingress_cidr_blocks" {
-  type = "list"
+  type = list(string)
 }
 
 variable "lambda_egress_cidr_blocks" {
-  type = "list"
+  type = list(string)
 }
 
 variable "lambda_environment_variables" {
   description = "Environment variables to be provied to the lambda function."
-  type = "map"
+  type = map(string)
 }
 
 variable "lambda_function_name" {}
