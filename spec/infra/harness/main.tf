@@ -15,7 +15,7 @@ module "lambda" {
 
   account_id = var.account_id
   vpc_id = data.terraform_remote_state.prerequisites.outputs.vpc_id
-
+  deploy_in_vpc = true
   lambda_subnet_ids = data.terraform_remote_state.prerequisites.outputs.private_subnet_ids
   lambda_zip_path = var.lambda_zip_path
   lambda_ingress_cidr_blocks = var.lambda_ingress_cidr_blocks

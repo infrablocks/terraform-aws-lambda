@@ -33,7 +33,7 @@ output "lambda_version" {
 }
 
 output "security_group_name" {
-  value = aws_security_group.sg_lambda.name
+  value = var.deploy_in_vpc ? aws_security_group.sg_lambda[0].name : ""
 }
 
 output "iam_role_name" {

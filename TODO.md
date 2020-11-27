@@ -6,4 +6,6 @@ TODO
   - Could provision for a different module definition each time
 * Use hiera config
   - Can't currently use listener configuration from external configuration
-* Add tags to security groups
+*  ~~Add tags to security groups~~
+
+* Add test for non-vpc mode deployment

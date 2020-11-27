@@ -1,96 +1,62 @@
+# Component / Service & AWS Account Settings
 variable "region" {
   description = "AWS region"
 }
-
-variable "component" {}
-variable "deployment_identifier" {}
 
 variable "account_id" {
   description = "AWS account id where the lambda execution"
 }
 
-variable "vpc_id" {
-  description = "VPC to deploy the lambda to"
+variable "component" {
+  description = "The name of the component or service"
 }
 
-variable "lambda_subnet_ids" {
-  description = "Subnet ids to deploy the lambda to"
-  type = list(string)
+variable "deployment_identifier" {
+  description = "The deployment identifier to use e.g. <deployment_type>-<deployment_label>"
 }
 
+# Lambda Settings
 
-variable "lambda_zip_path" {}
-
-variable "lambda_ingress_cidr_blocks" {
-  type = list(string)
+variable "lambda_function_name" {
+  description = "The name to use for the lambda function"
 }
 
-variable "lambda_egress_cidr_blocks" {
-  type = list(string)
+variable "lambda_description" {
+  description = "The description to use for the AWS Lambda"
+  default = ""
 }
 
-variable "lambda_environment_variables" {
-  description = "Environment variables to be provied to the lambda function."
-  type = map(string)
+variable "lambda_handler" {
+  description = "The name of the handler to use for the lambda function"
 }
 
-variable "lambda_function_name" {}
-
-variable "lambda_handler" {}
+variable "lambda_zip_path" {
+  description = "The location where the generated zip file should be stored"
+}
 
 variable "lambda_runtime" {
+  description = "The runtime to use for the lambda function"
   default = "nodejs10.x"
 }
 
 variable "lambda_timeout" {
+  description = "The timeout period to use for the lambda function"
   default = 30
 }
 
 variable "lambda_memory_size" {
+  description = "The amount of memeory to use for the lambda function"
   default = 128
 }
 
 variable "lambda_execution_policy" {
-  default =  <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "ec2:DescribeNetworkInterfaces",
-        "ec2:CreateNetworkInterface",
-        "ec2:DeleteNetworkInterface",
-        "ec2:DescribeSecurityGroups",
-        "ec2:DescribeSubnets",
-        "ec2:DescribeVpcs"
-      ],
-      "Resource": [
-        "*"
-      ]
-    },
-    {
-            "Effect": "Allow",
-            "Action": "logs:CreateLogGroup",
-            "Resource": "arn:aws:logs:eu-west-1:*:*"
-        },
-        {
-            "Effect": "Allow",
-            "Action": [
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-            ],
-            "Resource": [
-                "arn:aws:logs:eu-west-1:702464176885:*"
-            ]
-        }
-  ]
-}
-EOF
+  description = "The inline AWS execution policy to use for the lambda"
+  default =  ""
 }
 
 variable "lambda_assume_role" {
- default = <<EOF
+  description = "An inline AWS role policy which the lambda should assume during execution"
+  default = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
@@ -107,3 +73,40 @@ EOF
 
 }
 
+variable "lambda_environment_variables" {
+  description = "Environment variables to be provied to the lambda function."
+  type = map(string)
+}
+
+variable "tags" {
+  description = "AWS tags to use on created infrastructure components"
+  type = map(string)
+  default = { "Name" = "terraform-aws-lambda", "terraform" = true }
+}
+
+# Deployment Options
+
+variable "deploy_in_vpc" {
+  description = "Set to true to deploy the lambda in a vpc environment"
+  type = bool
+  default = true
+}
+
+# VPC Deployment Settings
+
+variable "vpc_id" {
+  description = "VPC to deploy the lambda to"
+}
+
+variable "lambda_subnet_ids" {
+  description = "Subnet ids to deploy the lambda to"
+  type = list(string)
+}
+
+variable "lambda_ingress_cidr_blocks" {
+  type = list(string)
+}
+
+variable "lambda_egress_cidr_blocks" {
+  type = list(string)
+}

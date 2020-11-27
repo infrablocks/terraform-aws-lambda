@@ -23,3 +23,4 @@ lambda_egress_cidr_blocks:
 lambda_environment_variables: '{"TEST_ENV_VARIABLE"="test-value"}'
 lambda_function_name: "test-lambda-resource"
 lambda_handler: "handler.hello"
+tags: {"Name": "terraform-aws-lambda", "terraform": "true"}

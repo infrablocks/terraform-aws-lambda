@@ -7,7 +7,6 @@ A Terraform module for creating a new lambda
 
 The lambda module requires:
 * A lambda function packaged as zip
-* existing VPC 
  
 The lambda resource consists of:
 - lambda function
@@ -28,7 +27,7 @@ module "lambda" {
   region                = "eu-west-2"
   component             = "my-lambda"
   deployment_identifier = "production"
-
+  deploy_in_vpc = true
   account_id = "11122233355"
   vpc_id = "VPC-1234"
   lambda_subnet_ids = "subnet-id-1"
@@ -38,8 +37,41 @@ module "lambda" {
   lambda_environment_variables = '{"TEST_ENV_VARIABLE"="test-value"}'
   lambda_function_name = "lambda-function"
   lambda_handler = "handler.hello"
-
-
+  lambda_description = "An optional description"
+  tags =  {
+             Name = "my-lambda-name",
+             Terraform = true
+           }
+  lambda_execution_policy =  jsonencode(
+      {
+        "Version": "2012-10-17",
+        "Statement": [
+          {
+            "Effect": "Allow",
+            "Action": [
+              "logs:DescribeLogGroups",
+              "logs:DescribeLogStreams",
+              "logs:CreateLogStream",
+              "logs:DeleteLogStream",
+              "logs:FilterLogEvents",
+              "logs:GetLogEvents",
+              "logs:PutLogEvents",
+            ],
+            "Resource": [
+              "arn:aws:logs:${var.region}:${data.aws_caller_identity.current.account_id}:*"
+            ]
+          },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "sns:Publish"
+              ],
+              "Resource": [
+                "arn:aws:sns:${var.region}:${data.aws_caller_identity.current.account_id}:*"
+              ]
+            }
+        ]
+      })
 }
 ```
 
@@ -53,6 +85,8 @@ module "lambda" {
 | deployment_identifier|An identifier for this instantiation                                           |- | yes |
 | account_id|AWS account ID                                           |- | yes |
 | vpc_id|VPC to deploy lambda to                                           |- | yes |
+| deploy_in_vpc | A boolean flag to disable VPC deployment | true | no
+| tags | The AWS tags to use for any deployed resources | - | no 
 | lambda_subnet_ids| subnet ids for the lambda |- | yes |
 | lambda_zip_path| location of your lambda zip archive |- | yes |
 | lambda_ingress_cidr_blocks| ingress CIDR for lambda |- | yes |
@@ -60,7 +94,8 @@ module "lambda" {
 | lambda_function_name| lambda function name |- | yes |
 | lambda_handler| handler path for lambda |- | yes |
 | lambda_environment_variables| environment variables for lambda|- | yes |
-
+| lambda_execution_policy | An inline policy to use for the lambda | - | no
+| lambda_description | A description to use for the lambda | - | no
 
 ### Outputs
 
@@ -78,6 +113,22 @@ module "lambda" {
 | lambda_source_code_hash                                     | Base64-encoded representation of raw SHA-256 sum of the zip file, provided either via filename or s3_* parameters.|
 | lambda_source_code_size                                     |  The size in bytes of the function .zip file.|
 | lambda_version                                     | Latest published version of your Lambda Function |
+
+### Private VPC Deployment 
+
+The module deploys the lambda into the configured VPC by default. If `deploy_in_vpc` is set to false - 
+the AWS lambda will be deployed outside of a private VPC environment.
+
+Remember that when deploying the lambda inside a VPC environment you will need to configure the appropriate routing and security 
+group permissions if you require access to AWS Services.
+
+### Execution IAM Policy
+
+If you want to customise the execution policy for the lambda then you can optionally supply an inline policy via the 
+`lambda_execution_policy` variable. 
+
+Be sure to include the permissions listed in the default policy so that the lambda
+can be created successfully, see `lambda_execution_policy` for the default policy.
 
 
 Development
