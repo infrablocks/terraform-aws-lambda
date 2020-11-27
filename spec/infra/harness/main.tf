@@ -12,6 +12,8 @@ module "lambda" {
   region = var.region
   component = var.component
   deployment_identifier = var.deployment_identifier
+  deployment_type = var.deployment_type
+  deployment_label = var.deployment_label
 
   account_id = var.account_id
   vpc_id = data.terraform_remote_state.prerequisites.outputs.vpc_id
@@ -23,4 +25,5 @@ module "lambda" {
   lambda_environment_variables = var.lambda_environment_variables
   lambda_function_name = var.lambda_function_name
   lambda_handler = var.lambda_handler
+
 }

@@ -26,7 +26,9 @@ module "lambda" {
   source  = "infrablocks/lambda/aws"
   region                = "eu-west-2"
   component             = "my-lambda"
-  deployment_identifier = "production"
+  deployment_identifier = "development-europe"
+  deployment_label = "europe"
+  deployment_type = "development"
   deploy_in_vpc = true
   account_id = "11122233355"
   vpc_id = "VPC-1234"
@@ -39,8 +41,10 @@ module "lambda" {
   lambda_handler = "handler.hello"
   lambda_description = "An optional description"
   tags =  {
-             Name = "my-lambda-name",
-             Terraform = true
+            Component = "my-lambda",
+            DeploymentType = "development",
+            DeploymentLabel = "europe",
+            DeploymentIdentifier = "development-europe"
            }
   lambda_execution_policy =  jsonencode(
       {
@@ -83,6 +87,8 @@ module "lambda" {
 | region                           | AWS Region                         | -                   | yes                                  |
 | component| The component for which the load balancer is being created    |- | yes|
 | deployment_identifier|An identifier for this instantiation                                           |- | yes |
+| deployment_label | A unique label per deployment | - | yes |
+| deployment_type | The type of deployment, e.g. development, production | - | | yes|
 | account_id|AWS account ID                                           |- | yes |
 | vpc_id|VPC to deploy lambda to                                           |- | yes |
 | deploy_in_vpc | A boolean flag to disable VPC deployment | true | no
@@ -94,8 +100,8 @@ module "lambda" {
 | lambda_function_name| lambda function name |- | yes |
 | lambda_handler| handler path for lambda |- | yes |
 | lambda_environment_variables| environment variables for lambda|- | yes |
-| lambda_execution_policy | An inline policy to use for the lambda | - | no
-| lambda_description | A description to use for the lambda | - | no
+| lambda_execution_policy | An inline policy to use for the lambda | - | no |
+| lambda_description | A description to use for the lambda | - | no| 
 
 ### Outputs
 

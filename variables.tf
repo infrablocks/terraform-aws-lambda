@@ -15,6 +15,14 @@ variable "deployment_identifier" {
   description = "The deployment identifier to use e.g. <deployment_type>-<deployment_label>"
 }
 
+variable "deployment_label" {
+  description = "The deployment label to use"
+}
+
+variable "deployment_type" {
+  description = "The deployment type to use"
+}
+
 # Lambda Settings
 
 variable "lambda_function_name" {
@@ -78,10 +86,18 @@ variable "lambda_environment_variables" {
   type = map(string)
 }
 
+locals {
+  tags = var.tags != null ? var.tags  : {
+    "Component" = var.component,
+    "DeploymentType" = var.deployment_type,
+    "DeploymentLabel" = var.deployment_label,
+    "DeploymentIdentifier" = var.deployment_identifier
+  }
+}
+
 variable "tags" {
   description = "AWS tags to use on created infrastructure components"
-  type = map(string)
-  default = { "Name" = "terraform-aws-lambda", "terraform" = true }
+  default = null
 }
 
 # Deployment Options

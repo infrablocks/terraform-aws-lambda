@@ -20,15 +20,18 @@ IMPROVEMENTS:
 * Added `tags` input to tag terraform managed resources
    
    A map of AWS tags can now be passed in via the `tags` input variable. The default tags are:
-   ```json
-    {
-     "Name": "aws-terraform-lambda",
-     "terraform": true
-    } 
-  ```
+    ```json
+     {
+         "Component" = "<component>",
+         "DeploymentType" = "<deployment_type>",
+         "DeploymentLabel" = "<deployment_label>",
+         "DeploymentIdentifier" = "<deployment_identifier>"
+       } 
+    ```
 * Removed the hard-coded AWS Region and AWS Account Id's in `lambda_execution_policy`.
 * Added `include_route53_zone_association = false` to test prerequisites to simplify test harness deployment 
 * Added ` "ec2:AssignPrivateIpAddresses", "ec2:UnassignPrivateIpAddresses"` to default execution policy
 to bring it inline with Amazon's default AWSLambdaVPCAccessExecutionRole.
 * Added an optional `lambda_description` variable
 * Added descriptions to variables for improved IDE code hints
+* Added `deployment_type` and `deployment_label` variables for tagging resources
