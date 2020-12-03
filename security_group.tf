@@ -1,6 +1,8 @@
 resource "aws_security_group" "sg_lambda" {
   description = "${var.deployment_identifier}-lambda"
   vpc_id = var.vpc_id
+  tags = local.tags
+  count = var.deploy_in_vpc == "yes" ? 1 : 0
 
   ingress {
     from_port = 0
