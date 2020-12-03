@@ -3,7 +3,7 @@ data "aws_caller_identity" "current" {
 
 resource "aws_iam_role" "lambda_execution_role" {
   assume_role_policy = var.lambda_assume_role
-  tags = var.tags
+  tags = local.tags
 }
 
 resource "aws_iam_role_policy" "lambda_execution_policy" {

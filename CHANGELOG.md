@@ -8,13 +8,13 @@ IMPROVEMENTS:
 
 IMPROVEMENTS:
 
-* Added a new boolean `deploy_in_vpc` flag to disable VPC deployments.
+* Added a new `deploy_in_vpc` flag to disable VPC deployments.
 
    This enables the lambda to be used more easily when you want to access
    global AWS Services without having to configure a VPC or routing. 
    To avoid breaking changes, the default mode is to deploy inside a VPC environment.
    
-   When `deploy_in_vpc` is set to false, the `sg_lambda` security_group is not created 
+   When `deploy_in_vpc` is set to "no", the `sg_lambda` security_group is not created 
    and the `vpc_config` is passed empty values to create an AWS Lambda outside of a VPC.
 
 * Added `tags` input to tag terraform managed resources

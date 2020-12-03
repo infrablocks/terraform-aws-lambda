@@ -1,49 +1,60 @@
 # Component / Service & AWS Account Settings
 variable "region" {
-  description = "AWS region"
+  description = "The region into which to deploy the Lambda."
+  type        = string
 }
 
 variable "account_id" {
   description = "AWS account id where the lambda execution"
+  type        = string
 }
 
 variable "component" {
   description = "The name of the component or service"
+  type        = string
 }
 
 variable "deployment_identifier" {
-  description = "The deployment identifier to use e.g. <deployment_type>-<deployment_label>"
+  description = "An identifier for this instantiation e.g. <deployment_type>-<deployment_label>"
+  type        = string
 }
 
 variable "deployment_label" {
   description = "The deployment label to use"
+  type        = string
 }
 
 variable "deployment_type" {
   description = "The deployment type to use"
+  type        = string
 }
 
 # Lambda Settings
 
 variable "lambda_function_name" {
   description = "The name to use for the lambda function"
+  type        = string
 }
 
 variable "lambda_description" {
   description = "The description to use for the AWS Lambda"
+  type        = string
   default = ""
 }
 
 variable "lambda_handler" {
   description = "The name of the handler to use for the lambda function"
+  type        = string
 }
 
 variable "lambda_zip_path" {
   description = "The location where the generated zip file should be stored"
+  type        = string
 }
 
 variable "lambda_runtime" {
   description = "The runtime to use for the lambda function"
+  type        = string
   default = "nodejs10.x"
 }
 
@@ -59,6 +70,7 @@ variable "lambda_memory_size" {
 
 variable "lambda_execution_policy" {
   description = "The inline AWS execution policy to use for the lambda"
+  type        = string
   default =  ""
 }
 
@@ -86,43 +98,39 @@ variable "lambda_environment_variables" {
   type = map(string)
 }
 
-locals {
-  tags = var.tags != null ? var.tags  : {
-    "Component" = var.component,
-    "DeploymentType" = var.deployment_type,
-    "DeploymentLabel" = var.deployment_label,
-    "DeploymentIdentifier" = var.deployment_identifier
-  }
-}
-
 variable "tags" {
   description = "AWS tags to use on created infrastructure components"
-  default = null
+  type = map(string)
+  default = {}
 }
+
 
 # Deployment Options
 
 variable "deploy_in_vpc" {
-  description = "Set to true to deploy the lambda in a vpc environment"
-  type = bool
-  default = true
+  description = "Whether or not to deploy the lambda into a VPC (\"yes\" or \"no\")."
+  type = string
+  default = "yes"
 }
 
 # VPC Deployment Settings
 
 variable "vpc_id" {
-  description = "VPC to deploy the lambda to"
+  description = "The ID of the VPC into which to deploy the lambda."
+  type        = string
 }
 
 variable "lambda_subnet_ids" {
-  description = "Subnet ids to deploy the lambda to"
+  description = "The IDs of the subnets for the lambda"
   type = list(string)
 }
 
 variable "lambda_ingress_cidr_blocks" {
+  description = "The ingress CIDR ranges to allow access"
   type = list(string)
 }
 
 variable "lambda_egress_cidr_blocks" {
+  description = "The egress CIDR ranges to allow access"
   type = list(string)
 }

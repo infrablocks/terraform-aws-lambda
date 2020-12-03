@@ -29,7 +29,7 @@ module "lambda" {
   deployment_identifier = "development-europe"
   deployment_label = "europe"
   deployment_type = "development"
-  deploy_in_vpc = true
+  deploy_in_vpc = "yes"
   account_id = "11122233355"
   vpc_id = "VPC-1234"
   lambda_subnet_ids = "subnet-id-1"
@@ -41,10 +41,7 @@ module "lambda" {
   lambda_handler = "handler.hello"
   lambda_description = "An optional description"
   tags =  {
-            Component = "my-lambda",
-            DeploymentType = "development",
-            DeploymentLabel = "europe",
-            DeploymentIdentifier = "development-europe"
+            "AdditionalTags" = "my-tag"
            }
   lambda_execution_policy =  jsonencode(
       {
@@ -91,7 +88,7 @@ module "lambda" {
 | deployment_type | The type of deployment, e.g. development, production | - | | yes|
 | account_id|AWS account ID                                           |- | yes |
 | vpc_id|VPC to deploy lambda to                                           |- | yes |
-| deploy_in_vpc | A boolean flag to disable VPC deployment | true | no
+| deploy_in_vpc | A flag to disable VPC deployment | yes | no
 | tags | The AWS tags to use for any deployed resources | - | no 
 | lambda_subnet_ids| subnet ids for the lambda |- | yes |
 | lambda_zip_path| location of your lambda zip archive |- | yes |
@@ -122,11 +119,11 @@ module "lambda" {
 
 ### Private VPC Deployment 
 
-The module deploys the lambda into the configured VPC by default. If `deploy_in_vpc` is set to false - 
+The module deploys the lambda into the configured VPC by default. If `deploy_in_vpc` is set to "no" then
 the AWS lambda will be deployed outside of a private VPC environment.
 
-Remember that when deploying the lambda inside a VPC environment you will need to configure the appropriate routing and security 
-group permissions if you require access to AWS Services.
+Remember that when deploying the lambda inside a VPC environment you will need to configure the appropriate routing
+and security group permissions if you require access to AWS Services.
 
 ### Execution IAM Policy
 
@@ -136,6 +133,11 @@ If you want to customise the execution policy for the lambda then you can option
 Be sure to include the permissions listed in the default policy so that the lambda
 can be created successfully, see `lambda_execution_policy` for the default policy.
 
+### Tags
+
+The module deploys `Component`, `DeploymentType`, `DeploymentLabel` and `DeploymentIdentifier` tags 
+for any created infrastructure by default. Additional tags can be optionally passed in via the `tags` input variable,
+which will then be merged together with the default tags.
 
 Development
 -----------
