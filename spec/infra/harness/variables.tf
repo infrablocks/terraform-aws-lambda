@@ -23,6 +23,8 @@ variable "lambda_egress_cidr_blocks" {
   type = list(string)
 }
 
-variable "tags" {}
+variable "tags" {
+  type = map(string)
+}
 
 variable "deploy_in_vpc" {}
