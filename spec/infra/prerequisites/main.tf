@@ -8,6 +8,6 @@ module "base_network" {
 
   component = var.component
   deployment_identifier = var.deployment_identifier
-  include_route53_zone_association = false
-  private_zone_id = var.private_zone_id
+
+  include_route53_zone_association = "no"
 }

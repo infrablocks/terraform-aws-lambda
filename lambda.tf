@@ -1,13 +1,17 @@
 resource "aws_lambda_function" "lambda" {
-  description = var.lambda_description
-  filename = var.lambda_zip_path
   function_name = var.lambda_function_name
-  role = aws_iam_role.lambda_execution_role.arn
+  description = var.lambda_description
+
+  filename = var.lambda_zip_path
   handler = var.lambda_handler
   source_code_hash = base64sha256(filebase64(var.lambda_zip_path))
   runtime = var.lambda_runtime
+
+  role = aws_iam_role.lambda_execution_role.arn
+
   timeout = var.lambda_timeout
   memory_size = var.lambda_memory_size
+
   tags = local.tags
 
   environment {
@@ -20,5 +24,4 @@ resource "aws_lambda_function" "lambda" {
     ] : []
     subnet_ids = var.deploy_in_vpc == "yes" ? var.lambda_subnet_ids : []
   }
-
 }

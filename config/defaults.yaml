@@ -7,7 +7,6 @@ component: 'test'
 work_directory: 'build'
 configuration_directory: "%{hiera('work_directory')}/%{hiera('source_directory')}"
 
-deploy_in_vpc: "yes"
 private_zone_id: 'Z2CDAFD23Q10HO'
 vpc_cidr: "10.1.0.0/16"
 availability_zones:
@@ -19,8 +18,12 @@ lambda_ingress_cidr_blocks:
 lambda_egress_cidr_blocks:
   - "0.0.0.0/0"
 
-lambda_zip_path: 'lambda.zip'
-lambda_environment_variables: '{"TEST_ENV_VARIABLE"="test-value"}'
 lambda_function_name: "test-lambda-resource"
 lambda_description: "test terraform-aws-lambda"
+
+lambda_zip_path: 'lambda.zip'
 lambda_handler: "handler.hello"
+
+lambda_environment_variables: '{"TEST_ENV_VARIABLE"="test-value"}'
+
+deploy_in_vpc: "yes"

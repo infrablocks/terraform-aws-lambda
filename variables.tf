@@ -1,4 +1,5 @@
 # Component / Service & AWS Account Settings
+
 variable "region" {
   description = "The region into which to deploy the Lambda."
   type        = string
@@ -19,16 +20,6 @@ variable "deployment_identifier" {
   type        = string
 }
 
-variable "deployment_label" {
-  description = "The deployment label to use"
-  type        = string
-}
-
-variable "deployment_type" {
-  description = "The deployment type to use"
-  type        = string
-}
-
 # Lambda Settings
 
 variable "lambda_function_name" {
@@ -39,7 +30,6 @@ variable "lambda_function_name" {
 variable "lambda_description" {
   description = "The description to use for the AWS Lambda"
   type        = string
-  default = ""
 }
 
 variable "lambda_handler" {
@@ -55,62 +45,49 @@ variable "lambda_zip_path" {
 variable "lambda_runtime" {
   description = "The runtime to use for the lambda function"
   type        = string
-  default = "nodejs10.x"
+  default     = "nodejs10.x"
 }
 
 variable "lambda_timeout" {
   description = "The timeout period to use for the lambda function"
-  default = 30
+  default     = 30
 }
 
 variable "lambda_memory_size" {
   description = "The amount of memeory to use for the lambda function"
-  default = 128
+  default     = 128
 }
 
 variable "lambda_execution_policy" {
   description = "The inline AWS execution policy to use for the lambda"
   type        = string
-  default =  ""
+  default     = null
 }
 
 variable "lambda_assume_role" {
   description = "An inline AWS role policy which the lambda should assume during execution"
-  default = <<EOF
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "lambda.amazonaws.com"
-      },
-      "Effect": "Allow"
-    }
-  ]
-}
-EOF
-
+  type        = string
+  default     = null
 }
 
 variable "lambda_environment_variables" {
-  description = "Environment variables to be provied to the lambda function."
-  type = map(string)
+  description = "Environment variables to be provided to the lambda function."
+  type        = map(string)
+  default     = {}
 }
 
 variable "tags" {
   description = "AWS tags to use on created infrastructure components"
-  type = map(string)
-  default = {}
+  type        = map(string)
+  default     = {}
 }
-
 
 # Deployment Options
 
 variable "deploy_in_vpc" {
   description = "Whether or not to deploy the lambda into a VPC (\"yes\" or \"no\")."
-  type = string
-  default = "yes"
+  type        = string
+  default     = "yes"
 }
 
 # VPC Deployment Settings
@@ -118,19 +95,23 @@ variable "deploy_in_vpc" {
 variable "vpc_id" {
   description = "The ID of the VPC into which to deploy the lambda."
   type        = string
+  default     = null
 }
 
 variable "lambda_subnet_ids" {
   description = "The IDs of the subnets for the lambda"
-  type = list(string)
+  type        = list(string)
+  default     = []
 }
 
 variable "lambda_ingress_cidr_blocks" {
   description = "The ingress CIDR ranges to allow access"
-  type = list(string)
+  type        = list(string)
+  default     = []
 }
 
 variable "lambda_egress_cidr_blocks" {
   description = "The egress CIDR ranges to allow access"
-  type = list(string)
+  type        = list(string)
+  default     = []
 }

@@ -11,8 +11,6 @@ vars:
   deploy_in_vpc: "%{hiera('deploy_in_vpc')}"
 
   account_id: "%{hiera('account_id')}"
-  tags: "%{hiera('tags')}"
-
 
   lambda_zip_path: "%{hiera('lambda_zip_path')}"
   lambda_ingress_cidr_blocks: "%{hiera('lambda_ingress_cidr_blocks')}"
@@ -21,3 +19,5 @@ vars:
   lambda_function_name: "%{hiera('lambda_function_name')}"
   lambda_description: "%{hiera('lambda_description')}"
   lambda_handler: "%{hiera('lambda_handler')}"
+
+  tags: "%{hiera('tags')}"
