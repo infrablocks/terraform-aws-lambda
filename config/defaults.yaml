@@ -27,3 +27,6 @@ lambda_handler: "handler.hello"
 lambda_environment_variables: '{"TEST_ENV_VARIABLE"="test-value"}'
 
 deploy_in_vpc: "yes"
+
+tags:
+  key: "value"
