@@ -90,6 +90,12 @@ variable "deploy_in_vpc" {
   default     = "yes"
 }
 
+variable "publish" {
+  description = "Whether or not to publish creation / change as a new lambda function version (\"yes\" or \"no\")."
+  type        = string
+  default     = "no"
+}
+
 # VPC Deployment Settings
 
 variable "vpc_id" {
