@@ -9,7 +9,6 @@ vars:
   deployment_identifier: "%{hiera('deployment_identifier')}"
   deployment_label: "%{hiera('deployment_label')}"
   deployment_type: "%{hiera('deployment_type')}"
-  deploy_in_vpc: "%{hiera('deploy_in_vpc')}"
 
   account_id: "%{hiera('account_id')}"
 
@@ -20,5 +19,7 @@ vars:
   lambda_function_name: "%{hiera('lambda_function_name')}"
   lambda_description: "%{hiera('lambda_description')}"
   lambda_handler: "%{hiera('lambda_handler')}"
+
+  deploy_in_vpc: "%{hiera('deploy_in_vpc')}"
 
   tags: "%{hiera('tags')}"
