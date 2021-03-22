@@ -28,7 +28,7 @@ describe 'lambda' do
       puts security_group_name
       puts subject.inspect
     end
-    
+
     it { should exist }
   end
 

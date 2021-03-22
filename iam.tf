@@ -2,7 +2,7 @@ data "aws_caller_identity" "current" {
 }
 
 resource "aws_iam_role" "lambda_execution_role" {
-  assume_role_policy = var.lambda_assume_role != null ? var.lambda_assume_role : jsonencode(
+  assume_role_policy = var.lambda_assume_role != "" ? var.lambda_assume_role : jsonencode(
   {
     "Version": "2012-10-17",
     "Statement": [
@@ -20,7 +20,7 @@ resource "aws_iam_role" "lambda_execution_role" {
 
 resource "aws_iam_role_policy" "lambda_execution_policy" {
   role = aws_iam_role.lambda_execution_role.id
-  policy = var.lambda_execution_policy != null ? var.lambda_execution_policy : jsonencode(
+  policy = var.lambda_execution_policy != "" ? var.lambda_execution_policy : jsonencode(
   {
     "Version": "2012-10-17",
     "Statement": [

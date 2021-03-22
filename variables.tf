@@ -61,13 +61,13 @@ variable "lambda_memory_size" {
 variable "lambda_execution_policy" {
   description = "The inline AWS execution policy to use for the lambda"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "lambda_assume_role" {
   description = "An inline AWS role policy which the lambda should assume during execution"
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "lambda_environment_variables" {
@@ -95,7 +95,7 @@ variable "deploy_in_vpc" {
 variable "vpc_id" {
   description = "The ID of the VPC into which to deploy the lambda."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "lambda_subnet_ids" {
