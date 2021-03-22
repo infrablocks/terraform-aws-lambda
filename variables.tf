@@ -73,7 +73,7 @@ variable "lambda_assume_role" {
 variable "lambda_environment_variables" {
   description = "Environment variables to be provided to the lambda function."
   type        = map(string)
-  default     = {}
+  default     = null
 }
 
 variable "tags" {
