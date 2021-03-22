@@ -3,30 +3,33 @@ require 'aws-sdk'
 
 describe 'lambda' do
   context 'lambda' do
-    let(:lambda_name) {vars.lambda_function_name}
-    let(:handler) {vars.lambda_handler}
+    let(:lambda_name) { vars.lambda_function_name }
+    let(:handler) { vars.lambda_handler }
 
-    subject {lambda(lambda_name)}
-    it {should exist}
+    subject { lambda(lambda_name) }
+    it { should exist }
 
-    it {should have_env_vars(["TEST_ENV_VARIABLE"])}
+    it { should have_env_vars(["TEST_ENV_VARIABLE"]) }
 
-    its(:runtime) {should eq "nodejs10.x"}
-    its(:memory_size) {should eq 128}
-    its(:timeout) {should eq 30}
-    its(:handler) {should eq handler}
+    its(:runtime) { should eq "nodejs10.x" }
+    its(:memory_size) { should eq 128 }
+    its(:timeout) { should eq 30 }
+    its(:handler) { should eq handler }
   end
 
   context 'security group' do
-    let(:security_group_name) {output_for(:harness, 'security_group_name')}
+    let(:security_group_name) do
+      output_for(:harness, 'security_group_name', parse: true)
+    end
 
-    subject {security_group(security_group_name)}
+    subject { security_group(security_group_name) }
 
     it "wat" do
       puts security_group_name
       puts subject.inspect
     end
-    it {should exist}
+    
+    it { should exist }
   end
 
   context 'IAM policy' do
