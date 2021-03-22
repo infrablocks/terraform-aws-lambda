@@ -24,11 +24,6 @@ describe 'lambda' do
 
     subject { security_group(security_group_name) }
 
-    it "wat" do
-      puts security_group_name
-      puts subject.inspect
-    end
-
     it { should exist }
   end
 
