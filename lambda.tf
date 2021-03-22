@@ -16,11 +16,8 @@ resource "aws_lambda_function" "lambda" {
 
   tags = local.tags
 
-  dynamic "environment" {
-    for_each = var.lambda_environment_variables == {} ? [null] : [var.lambda_environment_variables]
-    content {
-      variables = environment.value
-    }
+  environment {
+    variables = var.lambda_environment_variables == {} ? null : var.lambda_environment_variables
   }
 
   vpc_config {
