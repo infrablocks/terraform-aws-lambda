@@ -19,7 +19,7 @@ describe 'lambda' do
 
   context 'security group' do
     let(:security_group_name) do
-      output_for(:harness, 'security_group_name', parse: true)
+      output_for(:harness, 'security_group_name')
     end
 
     subject { security_group(security_group_name) }
