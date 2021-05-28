@@ -119,24 +119,28 @@ module "lambda" {
 
 ### Private VPC Deployment 
 
-The module deploys the lambda into the configured VPC by default. If `deploy_in_vpc` is set to "no" then
-the AWS lambda will be deployed outside of a private VPC environment.
+The module deploys the lambda into the configured VPC by default. If 
+`deploy_in_vpc` is set to "no" then the AWS lambda will be deployed outside of 
+a private VPC environment.
 
-Remember that when deploying the lambda inside a VPC environment you will need to configure the appropriate routing
-and security group permissions if you require access to AWS Services.
+Remember that when deploying the lambda inside a VPC environment you will need 
+to configure the appropriate routing and security group permissions if you 
+require access to AWS Services.
 
 ### Execution IAM Policy
 
-If you want to customise the execution policy for the lambda then you can optionally supply an inline policy via the 
-`lambda_execution_policy` variable. 
+If you want to customise the execution policy for the lambda then you can 
+optionally supply an inline policy via the `lambda_execution_policy` variable. 
 
-Be sure to include the permissions listed in the default policy so that the lambda
-can be created successfully, see `lambda_execution_policy` for the default policy.
+Be sure to include the permissions listed in the default policy so that the 
+lambda can be created successfully, see `lambda_execution_policy` for the 
+default policy.
 
 ### Tags
 
-The module deploys `Component`, `DeploymentType`, `DeploymentLabel` and `DeploymentIdentifier` tags 
-for any created infrastructure by default. Additional tags can be optionally passed in via the `tags` input variable,
+The module deploys `Component`, `DeploymentType`, `DeploymentLabel` and 
+`DeploymentIdentifier` tags for any created infrastructure by default. 
+Additional tags can be optionally passed in via the `tags` input variable,
 which will then be merged together with the default tags.
 
 Development
@@ -144,8 +148,8 @@ Development
 
 ### Machine Requirements
 
-In order for the build to run correctly, a few tools will need to be installed on your
-development machine:
+In order for the build to run correctly, a few tools will need to be installed 
+on your development machine:
 
 * Ruby (2.3.1)
 * Bundler
@@ -194,8 +198,8 @@ direnv allow <repository-directory>
 
 ### Running the build
 
-To provision module infrastructure, run tests and then destroy that infrastructure,
-execute:
+To provision module infrastructure, run tests and then destroy that 
+infrastructure, execute:
 
 ```bash
 ./go
@@ -262,12 +266,15 @@ openssl aes-256-cbc \
 Contributing
 ------------
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/infrablocks/terraform-aws-network-load-balancer. 
-This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to 
-the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at 
+https://github.com/infrablocks/terraform-aws-lambda. This project is intended to
+be a safe, welcoming space for collaboration, and contributors are expected to
+adhere to the [Contributor Covenant](http://contributor-covenant.org) code of 
+conduct.
 
 
 License
 -------
 
-The library is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
+The library is available as open source under the terms of the 
+[MIT License](http://opensource.org/licenses/MIT).
