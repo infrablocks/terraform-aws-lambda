@@ -76,6 +76,9 @@ module "lambda" {
 }
 ```
 
+See the 
+[Terraform registry entry](https://registry.terraform.io/modules/infrablocks/lambda/aws/latest) 
+for more details.
 
 ### Inputs
 
@@ -116,6 +119,11 @@ module "lambda" {
 | lambda_source_code_hash                                     | Base64-encoded representation of raw SHA-256 sum of the zip file, provided either via filename or s3_* parameters.|
 | lambda_source_code_size                                     |  The size in bytes of the function .zip file.|
 | lambda_version                                     | Latest published version of your Lambda Function |
+
+### Compatibility
+
+This module is compatible with Terraform versions greater than or equal to 
+Terraform 0.14.
 
 ### Private VPC Deployment 
 
