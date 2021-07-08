@@ -11,6 +11,7 @@ resource "aws_lambda_function" "lambda" {
 
   timeout     = var.lambda_timeout
   memory_size = var.lambda_memory_size
+  reserved_concurrent_executions = var.lambda_reserved_concurrent_executions
 
   publish = var.publish == "yes" ? true : false
 

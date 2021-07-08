@@ -21,5 +21,6 @@ vars:
   lambda_handler: "%{hiera('lambda_handler')}"
 
   deploy_in_vpc: "%{hiera('deploy_in_vpc')}"
+  lambda_reserved_concurrent_executions: "%{hiera('lambda_reserved_concurrent_executions')}"
 
   tags: "%{hiera('tags')}"

@@ -30,6 +30,7 @@ module "lambda" {
   lambda_egress_cidr_blocks = var.lambda_egress_cidr_blocks
 
   deploy_in_vpc = var.deploy_in_vpc
+  lambda_reserved_concurrent_executions = var.lambda_reserved_concurrent_executions
 
   tags = var.tags
 }
