@@ -28,3 +28,4 @@ variable "tags" {
 }
 
 variable "deploy_in_vpc" {}
+variable "lambda_reserved_concurrent_executions" {}

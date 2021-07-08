@@ -58,6 +58,11 @@ variable "lambda_memory_size" {
   default     = 128
 }
 
+variable "lambda_reserved_concurrent_executions" {
+  description = "Amount of reserved concurrent executions for this lambda function"
+  default = -1
+}
+
 variable "lambda_execution_policy" {
   description = "The inline AWS execution policy to use for the lambda"
   type        = string
