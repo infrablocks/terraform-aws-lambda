@@ -60,7 +60,7 @@ variable "lambda_memory_size" {
 
 variable "lambda_reserved_concurrent_executions" {
   description = "Amount of reserved concurrent executions for this lambda function"
-  default = -1
+  default = null
 }
 
 variable "lambda_execution_policy" {
