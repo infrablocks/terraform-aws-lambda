@@ -102,7 +102,7 @@ for more details.
 | lambda_environment_variables| environment variables for lambda|- | yes |
 | lambda_execution_policy | An inline policy to use for the lambda | - | no |
 | lambda_description | A description to use for the lambda | - | no| 
-| lambda_reserved_concurrent_executions | Amount of reserved concurrent executions for this lambda function | -1 | no| 
+| lambda_reserved_concurrent_executions | Amount of reserved concurrent executions for this lambda function | null | no| 
 
 ### Outputs
 
@@ -208,11 +208,14 @@ direnv allow <repository-directory>
 ### Running the build
 
 To provision module infrastructure, run tests and then destroy that 
-infrastructure, execute:
+infrastructure, substitute the private_zone_id in config/defaults.yaml for
+a hosted zone id in your own account. Then execute:
 
 ```bash
 ./go
 ```
+Note that because you are effectively spinning up AWS resources, you will need
+to execute with your credentials, eg aws-vault.
 
 To provision the module prerequisites:
 
