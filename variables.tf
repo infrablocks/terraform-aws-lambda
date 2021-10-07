@@ -45,7 +45,7 @@ variable "lambda_zip_path" {
 variable "lambda_runtime" {
   description = "The runtime to use for the lambda function"
   type        = string
-  default     = "nodejs10.x"
+  default     = "nodejs14.x"
 }
 
 variable "lambda_timeout" {
