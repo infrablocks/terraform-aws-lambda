@@ -11,7 +11,7 @@ describe 'lambda' do
 
     it { should have_env_vars(["TEST_ENV_VARIABLE"]) }
 
-    its(:runtime) { should eq "nodejs10.x" }
+    its(:runtime) { should eq "nodejs14.x" }
     its(:memory_size) { should eq 128 }
     its(:timeout) { should eq 30 }
     its(:handler) { should eq handler }
