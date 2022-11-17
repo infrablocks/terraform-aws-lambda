@@ -176,10 +176,10 @@ describe 'security group' do
     end
   end
 
-  describe 'when deploy in VPC is "yes"' do
+  describe 'when deploy in VPC is true' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.deploy_in_vpc = 'yes'
+        vars.deploy_in_vpc = true
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -258,10 +258,10 @@ describe 'security group' do
     end
   end
 
-  describe 'when deploy in VPC is "no"' do
+  describe 'when deploy in VPC is false' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.deploy_in_vpc = 'no'
+        vars.deploy_in_vpc = false
       end
     end
 

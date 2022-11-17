@@ -293,14 +293,14 @@ describe 'lambda' do
     end
   end
 
-  describe 'when publish is "yes"' do
+  describe 'when publish is true' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
           output(role: :prerequisites, name: 'private_subnet_ids')
-        vars.publish = 'yes'
+        vars.publish = true
       end
     end
 
@@ -311,14 +311,14 @@ describe 'lambda' do
     end
   end
 
-  describe 'when publish is "no"' do
+  describe 'when publish is false' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
           output(role: :prerequisites, name: 'private_subnet_ids')
-        vars.publish = 'no'
+        vars.publish = false
       end
     end
 
@@ -329,14 +329,14 @@ describe 'lambda' do
     end
   end
 
-  describe 'when deploy in VPC is "yes"' do
+  describe 'when deploy in VPC is true' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
           output(role: :prerequisites, name: 'private_subnet_ids')
-        vars.deploy_in_vpc = 'yes'
+        vars.deploy_in_vpc = true
       end
     end
 
@@ -352,10 +352,10 @@ describe 'lambda' do
     end
   end
 
-  describe 'when deploy in VPC is "no"' do
+  describe 'when deploy in VPC is false' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.deploy_in_vpc = 'no'
+        vars.deploy_in_vpc = false
       end
     end
 

@@ -10,7 +10,7 @@ locals {
   lambda_reserved_concurrent_executions = var.lambda_reserved_concurrent_executions == null ? -1 : var.lambda_reserved_concurrent_executions
   lambda_execution_role_policy          = var.lambda_execution_role_policy == null ? "" : var.lambda_execution_role_policy
   lambda_assume_role_policy             = var.lambda_assume_role_policy == null ? "" : var.lambda_assume_role_policy
-  deploy_in_vpc                         = var.deploy_in_vpc == null ? "yes" : var.deploy_in_vpc
-  publish                               = var.publish == null ? "no" : var.publish
+  deploy_in_vpc                         = var.deploy_in_vpc == null ? true : var.deploy_in_vpc
+  publish                               = var.publish == null ? false : var.publish
   tags                                  = var.tags == null ? {} : var.tags
 }

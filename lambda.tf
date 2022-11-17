@@ -13,7 +13,7 @@ resource "aws_lambda_function" "lambda" {
   memory_size                    = local.lambda_memory_size
   reserved_concurrent_executions = local.lambda_reserved_concurrent_executions
 
-  publish = local.publish == "yes" ? true : false
+  publish = local.publish
 
   tags = local.resolved_tags
 
@@ -25,7 +25,7 @@ resource "aws_lambda_function" "lambda" {
   }
 
   vpc_config {
-    security_group_ids = local.deploy_in_vpc == "yes" ? [aws_security_group.sg_lambda[0].id] : []
-    subnet_ids         = local.deploy_in_vpc == "yes" ? local.lambda_subnet_ids : []
+    security_group_ids = local.deploy_in_vpc ? [aws_security_group.sg_lambda[0].id] : []
+    subnet_ids         = local.deploy_in_vpc ? local.lambda_subnet_ids : []
   }
 }

@@ -55,7 +55,7 @@ variable "lambda_memory_size" {
 
 variable "lambda_reserved_concurrent_executions" {
   description = "Amount of reserved concurrent executions for this lambda function"
-  default = -1
+  default     = -1
 }
 
 variable "lambda_execution_role_policy" {
@@ -85,15 +85,15 @@ variable "tags" {
 # Deployment Options
 
 variable "deploy_in_vpc" {
-  description = "Whether or not to deploy the lambda into a VPC (\"yes\" or \"no\")."
-  type        = string
-  default     = "yes"
+  description = "Whether or not to deploy the lambda into a VPC."
+  type        = bool
+  default     = true
 }
 
 variable "publish" {
-  description = "Whether or not to publish creation / change as a new lambda function version (\"yes\" or \"no\")."
-  type        = string
-  default     = "no"
+  description = "Whether or not to publish creation / change as a new lambda function version."
+  type        = bool
+  default     = false
 }
 
 # VPC Deployment Settings

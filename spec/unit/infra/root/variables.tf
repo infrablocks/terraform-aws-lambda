@@ -55,8 +55,10 @@ variable "tags" {
 }
 
 variable "deploy_in_vpc" {
+  type = bool
   default = null
 }
 variable "publish" {
+  type = bool
   default = null
 }
