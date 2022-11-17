@@ -41,12 +41,12 @@ data "aws_iam_policy_document" "lambda_execution_policy" {
 }
 
 resource "aws_iam_role" "lambda_execution_role" {
-  assume_role_policy = local.lambda_assume_role_policy != "" ? local.lambda_assume_role_policy : data.aws_iam_policy_document.lambda_execution_assume_role_policy.json
+  assume_role_policy = var.lambda_assume_role_policy != "" ? var.lambda_assume_role_policy : data.aws_iam_policy_document.lambda_execution_assume_role_policy.json
   tags = local.resolved_tags
 }
 
 resource "aws_iam_role_policy" "lambda_execution_policy" {
   role = aws_iam_role.lambda_execution_role.id
-  policy = local.lambda_execution_role_policy != "" ? local.lambda_execution_role_policy : data.aws_iam_policy_document.lambda_execution_policy.json
+  policy = var.lambda_execution_role_policy != "" ? var.lambda_execution_role_policy : data.aws_iam_policy_document.lambda_execution_policy.json
 }
 
