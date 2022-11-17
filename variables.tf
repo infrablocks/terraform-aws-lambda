@@ -5,11 +5,6 @@ variable "region" {
   type        = string
 }
 
-variable "account_id" {
-  description = "AWS account id where the lambda execution"
-  type        = string
-}
-
 variable "component" {
   description = "The name of the component or service"
   type        = string
@@ -63,14 +58,14 @@ variable "lambda_reserved_concurrent_executions" {
   default = -1
 }
 
-variable "lambda_execution_policy" {
-  description = "The inline AWS execution policy to use for the lambda"
+variable "lambda_execution_role_policy" {
+  description = "The inline AWS execution role policy to use for the lambda."
   type        = string
   default     = ""
 }
 
-variable "lambda_assume_role" {
-  description = "An inline AWS role policy which the lambda should assume during execution"
+variable "lambda_assume_role_policy" {
+  description = "An inline AWS role policy which the lambda should assume during execution."
   type        = string
   default     = ""
 }

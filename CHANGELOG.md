@@ -1,3 +1,13 @@
+## Unreleased
+
+BACKWARDS INCOMPATIBILITIES / NOTES:
+
+* The `lambda_assume_role` var is now called `lambda_assume_role_policy`.
+* The `lambda_execution_policy` var is now called
+  `lambda_execution_role_policy`.
+* The `account_id` var has been removed and the current account is instead 
+  determined from a data resource.
+
 ## 1.0.0 (May 28th, 2021)
 
 BACKWARDS INCOMPATIBILITIES / NOTES:

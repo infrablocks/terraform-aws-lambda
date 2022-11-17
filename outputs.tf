@@ -35,7 +35,7 @@ output "lambda_version" {
   value = aws_lambda_function.lambda.version
 }
 output "security_group_name" {
-  value = var.deploy_in_vpc == "yes" ? aws_security_group.sg_lambda[0].name : null
+  value = local.deploy_in_vpc == "yes" ? aws_security_group.sg_lambda[0].name : null
 }
 output "iam_role_name" {
   value = aws_iam_role.lambda_execution_role.name
