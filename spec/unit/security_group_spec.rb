@@ -89,7 +89,7 @@ describe 'security group' do
 
     it 'outputs the security group name' do
       expect(@plan)
-        .to(include_output_creation(name: 'security_group_name'))
+        .to(include_output(name: 'security_group_name'))
     end
   end
 
