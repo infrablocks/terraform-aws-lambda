@@ -54,7 +54,7 @@ variable "tags" {
   default = null
 }
 
-variable "deploy_in_vpc" {
+variable "include_vpc_access" {
   type = bool
   default = null
 }

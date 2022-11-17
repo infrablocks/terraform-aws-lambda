@@ -26,12 +26,7 @@ describe 'lambda' do
 
   describe 'by default' do
     before(:context) do
-      @plan = plan(role: :root) do |vars|
-        vars.vpc_id =
-          output(role: :prerequisites, name: 'vpc_id')
-        vars.lambda_subnet_ids =
-          output(role: :prerequisites, name: 'private_subnet_ids')
-      end
+      @plan = plan(role: :root)
     end
 
     it 'creates a lambda function' do
@@ -122,14 +117,21 @@ describe 'lambda' do
               ))
     end
 
-    it 'includes VPC access using the provided subnets' do
-      subnet_ids =
-        output(role: :prerequisites, name: 'private_subnet_ids')
+    it 'does not include VPC access using the provided subnets' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(
                 [:vpc_config, 0, :subnet_ids],
-                contain_exactly(*subnet_ids)
+                a_nil_value
+              ))
+    end
+
+    it 'does not add a VPC security group' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(
+                [:vpc_config, 0, :security_group_ids],
+                a_nil_value
               ))
     end
 
@@ -197,10 +199,6 @@ describe 'lambda' do
   describe 'when lambda runtime provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.vpc_id =
-          output(role: :prerequisites, name: 'vpc_id')
-        vars.lambda_subnet_ids =
-          output(role: :prerequisites, name: 'private_subnet_ids')
         vars.lambda_runtime = 'nodejs16.x'
       end
     end
@@ -215,10 +213,6 @@ describe 'lambda' do
   describe 'when lambda timeout provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.vpc_id =
-          output(role: :prerequisites, name: 'vpc_id')
-        vars.lambda_subnet_ids =
-          output(role: :prerequisites, name: 'private_subnet_ids')
         vars.lambda_timeout = 60
       end
     end
@@ -233,10 +227,6 @@ describe 'lambda' do
   describe 'when lambda memory size provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.vpc_id =
-          output(role: :prerequisites, name: 'vpc_id')
-        vars.lambda_subnet_ids =
-          output(role: :prerequisites, name: 'private_subnet_ids')
         vars.lambda_memory_size = 256
       end
     end
@@ -251,10 +241,6 @@ describe 'lambda' do
   describe 'when lambda reserved concurrent executions provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.vpc_id =
-          output(role: :prerequisites, name: 'vpc_id')
-        vars.lambda_subnet_ids =
-          output(role: :prerequisites, name: 'private_subnet_ids')
         vars.lambda_reserved_concurrent_executions = 10
       end
     end
@@ -269,10 +255,6 @@ describe 'lambda' do
   describe 'when lambda environment variables provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.vpc_id =
-          output(role: :prerequisites, name: 'vpc_id')
-        vars.lambda_subnet_ids =
-          output(role: :prerequisites, name: 'private_subnet_ids')
         vars.lambda_environment_variables = {
           'VAR1' => 'VAL1',
           'VAR2' => 'VAL2'
@@ -296,10 +278,6 @@ describe 'lambda' do
   describe 'when publish is true' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.vpc_id =
-          output(role: :prerequisites, name: 'vpc_id')
-        vars.lambda_subnet_ids =
-          output(role: :prerequisites, name: 'private_subnet_ids')
         vars.publish = true
       end
     end
@@ -314,10 +292,6 @@ describe 'lambda' do
   describe 'when publish is false' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.vpc_id =
-          output(role: :prerequisites, name: 'vpc_id')
-        vars.lambda_subnet_ids =
-          output(role: :prerequisites, name: 'private_subnet_ids')
         vars.publish = false
       end
     end
@@ -329,14 +303,14 @@ describe 'lambda' do
     end
   end
 
-  describe 'when deploy in VPC is true' do
+  describe 'when include_vpc_access is true' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.include_vpc_access = true
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
           output(role: :prerequisites, name: 'private_subnet_ids')
-        vars.deploy_in_vpc = true
       end
     end
 
@@ -352,10 +326,10 @@ describe 'lambda' do
     end
   end
 
-  describe 'when deploy in VPC is false' do
+  describe 'when include_vpc_access is false' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.deploy_in_vpc = false
+        vars.include_vpc_access = false
       end
     end
 
@@ -381,10 +355,6 @@ describe 'lambda' do
   describe 'when tags provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.vpc_id =
-          output(role: :prerequisites, name: 'vpc_id')
-        vars.lambda_subnet_ids =
-          output(role: :prerequisites, name: 'private_subnet_ids')
         vars.tags = {
           Thing1: 'value1',
           Thing2: 'value2'

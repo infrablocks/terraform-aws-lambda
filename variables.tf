@@ -91,10 +91,10 @@ variable "tags" {
 
 # Deployment Options
 
-variable "deploy_in_vpc" {
-  description = "Whether or not to deploy the lambda into a VPC."
+variable "include_vpc_access" {
+  description = "Whether or not to allow the lambda to access a VPC."
   type        = bool
-  default     = true
+  default     = false
   nullable    = false
 }
 

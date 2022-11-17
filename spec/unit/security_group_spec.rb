@@ -15,87 +15,19 @@ describe 'security group' do
 
   describe 'by default' do
     before(:context) do
-      @plan = plan(role: :root) do |vars|
-        vars.vpc_id =
-          output(role: :prerequisites, name: 'vpc_id')
-        vars.lambda_subnet_ids =
-          output(role: :prerequisites, name: 'private_subnet_ids')
-      end
+      @plan = plan(role: :root)
     end
 
-    it 'creates a security group for the lambda' do
+    it 'does not create a security group for the lambda' do
       expect(@plan)
-        .to(include_resource_creation(type: 'aws_security_group')
-              .once)
-    end
-
-    it 'includes the deployment identifier in the security group description' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_security_group')
-              .with_attribute_value(
-                :description, including(deployment_identifier)
-              ))
-    end
-
-    it 'uses the provided VPC ID' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_security_group')
-              .with_attribute_value(:vpc_id, vpc_id))
-    end
-
-    it 'includes component and deployment identifiers as tags on the role' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_security_group')
-              .with_attribute_value(
-                :tags,
-                a_hash_including(
-                  Component: component,
-                  DeploymentIdentifier: deployment_identifier
-                )
-              ))
-    end
-
-    it 'allows ingress on any port with any protocol' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_security_group')
-              .with_attribute_value([:ingress, 0, :from_port], 0)
-              .with_attribute_value([:ingress, 0, :to_port], 0)
-              .with_attribute_value([:ingress, 0, :protocol], '-1'))
-    end
-
-    it 'has no ingress CIDR blocks' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_security_group')
-              .with_attribute_value(
-                [:ingress, 0, :cidr_blocks], a_nil_value
-              ))
-    end
-
-    it 'allows egress on any port with any protocol' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_security_group')
-              .with_attribute_value([:egress, 0, :from_port], 0)
-              .with_attribute_value([:egress, 0, :to_port], 0)
-              .with_attribute_value([:egress, 0, :protocol], '-1'))
-    end
-
-    it 'has no egress CIDR blocks' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_security_group')
-              .with_attribute_value(
-                [:egress, 0, :cidr_blocks], a_nil_value
-              ))
-    end
-
-    it 'outputs the security group name' do
-      expect(@plan)
-        .to(include_output_creation(name: 'security_group_name'))
+        .not_to(include_resource_creation(type: 'aws_security_group'))
     end
   end
 
   describe 'when lambda ingress cidr blocks provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.include_vpc_access = true
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -118,6 +50,7 @@ describe 'security group' do
   describe 'when lambda egress cidr blocks provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.include_vpc_access = true
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -140,6 +73,7 @@ describe 'security group' do
   describe 'when tags provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.include_vpc_access = true
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -176,10 +110,10 @@ describe 'security group' do
     end
   end
 
-  describe 'when deploy in VPC is true' do
+  describe 'when include_vpc_access is true' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.deploy_in_vpc = true
+        vars.include_vpc_access = true
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -258,10 +192,10 @@ describe 'security group' do
     end
   end
 
-  describe 'when deploy in VPC is false' do
+  describe 'when include_vpc_access is false' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
-        vars.deploy_in_vpc = false
+        vars.include_vpc_access = false
       end
     end
 

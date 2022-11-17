@@ -25,7 +25,7 @@ resource "aws_lambda_function" "lambda" {
   }
 
   vpc_config {
-    security_group_ids = var.deploy_in_vpc ? [aws_security_group.sg_lambda[0].id] : []
-    subnet_ids         = var.deploy_in_vpc ? var.lambda_subnet_ids : []
+    security_group_ids = var.include_vpc_access ? [aws_security_group.sg_lambda[0].id] : []
+    subnet_ids         = var.include_vpc_access ? var.lambda_subnet_ids : []
   }
 }
