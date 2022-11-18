@@ -22,7 +22,7 @@ describe 'execution role' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
       end
     end
 
@@ -119,7 +119,7 @@ describe 'execution role' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.lambda_assume_role_policy =
           File.read('spec/unit/test-assume-role-policy.json')
       end
@@ -146,7 +146,7 @@ describe 'execution role' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.lambda_execution_role_policy =
           File.read('spec/unit/test-execution-role-policy.json')
       end

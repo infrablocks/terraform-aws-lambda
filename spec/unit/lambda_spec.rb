@@ -22,7 +22,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.lambda_image_uri = output(role: :prerequisites, name: 'image_uri')
       end
     end
@@ -215,7 +215,7 @@ describe 'lambda' do
 
         # passed to ensure they don't get set
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
       end
     end
 
@@ -240,7 +240,7 @@ describe 'lambda' do
     it 'uses a package type of "Image"' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:package_type, "Image"))
+              .with_attribute_value(:package_type, 'Image'))
     end
 
     it 'uses the provided image URI' do
@@ -254,7 +254,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.lambda_runtime = 'nodejs16.x'
       end
     end
@@ -270,7 +270,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.lambda_timeout = 60
       end
     end
@@ -286,7 +286,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.lambda_memory_size = 256
       end
     end
@@ -302,7 +302,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.lambda_reserved_concurrent_executions = 10
       end
     end
@@ -318,7 +318,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.lambda_environment_variables = {
           'VAR1' => 'VAL1',
           'VAR2' => 'VAL2'
@@ -343,7 +343,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.publish = true
       end
     end
@@ -359,7 +359,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.publish = false
       end
     end
@@ -375,7 +375,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.include_vpc_access = true
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
@@ -400,7 +400,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.include_vpc_access = false
       end
     end
@@ -428,7 +428,7 @@ describe 'lambda' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.tags = {
           Thing1: 'value1',
           Thing2: 'value2'

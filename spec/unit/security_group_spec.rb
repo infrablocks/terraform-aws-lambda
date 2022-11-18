@@ -17,7 +17,7 @@ describe 'security group' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
       end
     end
 
@@ -32,7 +32,7 @@ describe 'security group' do
       @plan = plan(role: :root) do |vars|
         vars.include_vpc_access = true
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -57,7 +57,7 @@ describe 'security group' do
       @plan = plan(role: :root) do |vars|
         vars.include_vpc_access = true
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -82,7 +82,7 @@ describe 'security group' do
       @plan = plan(role: :root) do |vars|
         vars.include_vpc_access = true
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -124,7 +124,7 @@ describe 'security group' do
       @plan = plan(role: :root) do |vars|
         vars.include_vpc_access = true
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -208,7 +208,7 @@ describe 'security group' do
       @plan = plan(role: :root) do |vars|
         vars.include_vpc_access = false
         vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = "handler.hello"
+        vars.lambda_handler = 'handler.hello'
       end
     end
 
