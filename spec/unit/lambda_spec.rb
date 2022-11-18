@@ -23,7 +23,6 @@ describe 'lambda' do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
         vars.lambda_handler = 'handler.hello'
-        vars.lambda_image_uri = output(role: :prerequisites, name: 'image_uri')
       end
     end
 
@@ -83,12 +82,6 @@ describe 'lambda' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(:runtime, 'nodejs14.x'))
-    end
-
-    it 'does not set an image URI' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:image_uri, a_nil_value))
     end
 
     it 'uses a timeout of 30 seconds' do
@@ -207,46 +200,81 @@ describe 'lambda' do
   end
 
   describe 'when lambda package type is "Image"' do
-    before(:context) do
-      @image_uri = output(role: :prerequisites, name: 'image_uri')
-      @plan = plan(role: :root) do |vars|
-        vars.lambda_package_type = 'Image'
-        vars.lambda_image_uri = @image_uri
+    describe 'by default' do
+      before(:context) do
+        @image_uri = output(role: :prerequisites, name: 'image_uri')
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_package_type = 'Image'
+          vars.lambda_image_uri = @image_uri
 
-        # passed to ensure they don't get set
-        vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = 'handler.hello'
+          # passed to ensure they don't get set
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+        end
       end
-    end
 
-    it 'does not set a filename' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:filename, a_nil_value))
-    end
+      it 'does not set a filename' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:filename, a_nil_value))
+      end
 
-    it 'does not set a source code hash' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:source_code_hash, a_nil_value))
-    end
+      it 'does not set a source code hash' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:source_code_hash, a_nil_value))
+      end
 
-    it 'does not set a handler' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:handler, a_nil_value))
-    end
+      it 'does not set a handler' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:handler, a_nil_value))
+      end
 
-    it 'uses a package type of "Image"' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:package_type, 'Image'))
-    end
+      it 'uses a package type of "Image"' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:package_type, 'Image'))
+      end
 
-    it 'uses the provided image URI' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:image_uri, @image_uri))
+      it 'uses the provided image URI' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:image_uri, @image_uri))
+      end
+
+      it 'does not set an image command' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:image_config, 0],
+                  a_hash_including(
+                    command: a_nil_value
+                  )
+                ))
+      end
+
+      it 'does not set an image working directory' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:image_config, 0],
+                  a_hash_including(
+                    working_directory: a_nil_value
+                  )
+                ))
+      end
+
+      it 'does not set an image entry point' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:image_config, 0],
+                  a_hash_including(
+                    entry_point: a_nil_value
+                  )
+                ))
+      end
     end
 
     describe 'when image config command provided' do
@@ -310,19 +338,81 @@ describe 'lambda' do
     end
   end
 
-  describe 'when lambda runtime provided' do
-    before(:context) do
-      @plan = plan(role: :root) do |vars|
-        vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = 'handler.hello'
-        vars.lambda_runtime = 'nodejs16.x'
+  describe 'when lambda package type is "Zip"' do
+    describe 'by default' do
+      before(:context) do
+        @image_uri = output(role: :prerequisites, name: 'image_uri')
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_package_type = 'Zip'
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+
+          # passed to ensure they don't get set
+          vars.lambda_image_uri = @image_uri
+        end
+      end
+
+      it 'uses a package type of "Zip"' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:package_type, 'Zip'))
+      end
+
+      it 'uses the provided zip path' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:filename, 'lambda.zip'))
+      end
+
+      it 'determines the source code hash from the provided zip path' do
+        source_code =
+          File.read(
+            File.join(
+              'spec', 'unit', 'infra', 'root', 'lambda.zip'
+            )
+          )
+        source_code_base64 = Base64.strict_encode64(source_code)
+        source_code_sha256 =
+          Digest::SHA2.new(256)
+                      .base64digest(source_code_base64)
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:source_code_hash, source_code_sha256))
+      end
+
+      it 'uses the provided handler' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:handler, 'handler.hello'))
+      end
+
+      it 'uses a runtime of "nodejs14.x"' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:runtime, 'nodejs14.x'))
+      end
+
+      it 'does not set an image URI' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:image_uri, a_nil_value))
       end
     end
 
-    it 'uses the provided runtime' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:runtime, 'nodejs16.x'))
+    describe 'when lambda runtime provided' do
+      before(:context) do
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+          vars.lambda_runtime = 'nodejs16.x'
+        end
+      end
+
+      it 'uses the provided runtime' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(:runtime, 'nodejs16.x'))
+      end
     end
   end
 
