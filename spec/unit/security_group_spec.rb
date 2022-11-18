@@ -15,7 +15,10 @@ describe 'security group' do
 
   describe 'by default' do
     before(:context) do
-      @plan = plan(role: :root)
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
+      end
     end
 
     it 'does not create a security group for the lambda' do
@@ -28,6 +31,8 @@ describe 'security group' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.include_vpc_access = true
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -51,6 +56,8 @@ describe 'security group' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.include_vpc_access = true
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -74,6 +81,8 @@ describe 'security group' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.include_vpc_access = true
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -114,6 +123,8 @@ describe 'security group' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.include_vpc_access = true
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
         vars.lambda_subnet_ids =
@@ -196,6 +207,8 @@ describe 'security group' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.include_vpc_access = false
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
       end
     end
 

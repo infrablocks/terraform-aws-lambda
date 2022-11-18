@@ -1,11 +1,16 @@
+// noinspection ConflictingProperties
 resource "aws_lambda_function" "lambda" {
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
-  filename         = var.lambda_zip_path
-  handler          = var.lambda_handler
-  source_code_hash = base64sha256(filebase64(var.lambda_zip_path))
-  runtime          = var.lambda_runtime
+  package_type = var.lambda_package_type
+
+  filename         = var.lambda_package_type == "Zip" ? var.lambda_zip_path : null
+  handler          = var.lambda_package_type == "Zip" ? var.lambda_handler : null
+  source_code_hash = var.lambda_package_type == "Zip" ? base64sha256(filebase64(var.lambda_zip_path)) : null
+  runtime          = var.lambda_package_type == "Zip" ? var.lambda_runtime : null
+
+  image_uri = var.lambda_package_type == "Image" ? var.lambda_image_uri : null
 
   role = aws_iam_role.lambda_execution_role.arn
 

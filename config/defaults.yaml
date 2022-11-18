@@ -14,6 +14,3 @@ private_zone_id: 'Z0211739BXR21FNN139O'
 
 lambda_function_name: "test-lambda-resource-%{hiera('deployment_identifier')}"
 lambda_description: "test terraform-aws-lambda"
-
-lambda_zip_path: 'lambda.zip'
-lambda_handler: "handler.hello"

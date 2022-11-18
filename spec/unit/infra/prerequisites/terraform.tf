@@ -6,5 +6,9 @@ terraform {
       source = "hashicorp/aws"
       version = "4.33"
     }
+    dockerless = {
+      source = "nullstone-io/dockerless"
+      version = "0.1.1"
+    }
   }
 }

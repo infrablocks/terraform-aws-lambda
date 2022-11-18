@@ -17,10 +17,14 @@ module "lambda" {
 
   lambda_function_name = var.lambda_function_name
   lambda_description   = var.lambda_description
-  lambda_runtime       = var.lambda_runtime
+
+  lambda_package_type = var.lambda_package_type
 
   lambda_zip_path = var.lambda_zip_path
   lambda_handler  = var.lambda_handler
+  lambda_runtime  = var.lambda_runtime
+
+  lambda_image_uri = var.lambda_image_uri
 
   lambda_environment_variables = var.lambda_environment_variables
 

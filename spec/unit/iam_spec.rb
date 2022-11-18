@@ -20,7 +20,10 @@ describe 'execution role' do
 
   describe 'by default' do
     before(:context) do
-      @plan = plan(role: :root)
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
+      end
     end
 
     it 'creates an execution role' do
@@ -115,6 +118,8 @@ describe 'execution role' do
   describe 'when lambda assume role policy provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.lambda_assume_role_policy =
           File.read('spec/unit/test-assume-role-policy.json')
       end
@@ -140,6 +145,8 @@ describe 'execution role' do
   describe 'when lambda execution role policy provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.lambda_execution_role_policy =
           File.read('spec/unit/test-execution-role-policy.json')
       end

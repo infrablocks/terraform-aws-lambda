@@ -9,12 +9,24 @@ variable "vpc_id" {
 variable "lambda_function_name" {}
 variable "lambda_description" {}
 
-variable "lambda_zip_path" {}
-variable "lambda_handler" {}
+variable "lambda_package_type" {
+  default = null
+}
 
+variable "lambda_zip_path" {
+  default = null
+}
+variable "lambda_handler" {
+  default = null
+}
 variable "lambda_runtime" {
   default = null
 }
+
+variable "lambda_image_uri" {
+  default = null
+}
+
 variable "lambda_timeout" {
   default = null
 }
