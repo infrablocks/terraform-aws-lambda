@@ -27,14 +27,23 @@ variable "lambda_description" {
   type        = string
 }
 
-variable "lambda_handler" {
-  description = "The name of the handler to use for the lambda function"
+variable "lambda_package_type" {
+  description = "The lambda deployment package type. Valid values are \"Zip\" and \"Image\". Defaults to \"Zip\"."
   type        = string
+  default     = "Zip"
+  nullable    = false
+}
+
+variable "lambda_handler" {
+  description = "The name of the handler to use for the lambda function. Required when `lambda_package_type` is \"Zip\"."
+  type        = string
+  default     = null
 }
 
 variable "lambda_zip_path" {
-  description = "The location where the generated zip file should be stored"
+  description = "The location where the generated zip file should be stored. Required when `lambda_package_type` is \"Zip\"."
   type        = string
+  default     = null
 }
 
 variable "lambda_runtime" {
@@ -42,6 +51,26 @@ variable "lambda_runtime" {
   type        = string
   default     = "nodejs14.x"
   nullable    = false
+}
+
+variable "lambda_image_uri" {
+  description = "The ECR image URI containing the function's deployment package. Required when `lambda_package_type` is \"Image\"."
+  type        = string
+  default     = null
+}
+
+variable "lambda_image_config" {
+  description = "Container image configuration values that override the values in the container image Dockerfile."
+  type = object({
+    command: string,
+    entry_point: string,
+    working_directory: string
+  })
+  default = {
+    command: null,
+    entry_point: null,
+    working_directory: null
+  }
 }
 
 variable "lambda_timeout" {

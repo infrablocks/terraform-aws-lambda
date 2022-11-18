@@ -17,16 +17,13 @@ describe 'lambda' do
   let(:lambda_description) do
     var(role: :root, name: 'lambda_description')
   end
-  let(:lambda_zip_path) do
-    var(role: :root, name: 'lambda_zip_path')
-  end
-  let(:lambda_handler) do
-    var(role: :root, name: 'lambda_handler')
-  end
 
   describe 'by default' do
     before(:context) do
-      @plan = plan(role: :root)
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
+      end
     end
 
     it 'creates a lambda function' do
@@ -50,14 +47,14 @@ describe 'lambda' do
     it 'uses the provided zip path' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:filename, lambda_zip_path))
+              .with_attribute_value(:filename, 'lambda.zip'))
     end
 
     it 'determines the source code hash from the provided zip path' do
       source_code =
         File.read(
           File.join(
-            'spec', 'unit', 'infra', 'root', lambda_zip_path
+            'spec', 'unit', 'infra', 'root', 'lambda.zip'
           )
         )
       source_code_base64 = Base64.strict_encode64(source_code)
@@ -72,7 +69,7 @@ describe 'lambda' do
     it 'uses the provided handler' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:handler, lambda_handler))
+              .with_attribute_value(:handler, 'handler.hello'))
     end
 
     it 'uses a runtime of "nodejs14.x"' do
@@ -199,6 +196,8 @@ describe 'lambda' do
   describe 'when lambda runtime provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.lambda_runtime = 'nodejs16.x'
       end
     end
@@ -213,6 +212,8 @@ describe 'lambda' do
   describe 'when lambda timeout provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.lambda_timeout = 60
       end
     end
@@ -227,6 +228,8 @@ describe 'lambda' do
   describe 'when lambda memory size provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.lambda_memory_size = 256
       end
     end
@@ -241,6 +244,8 @@ describe 'lambda' do
   describe 'when lambda reserved concurrent executions provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.lambda_reserved_concurrent_executions = 10
       end
     end
@@ -255,6 +260,8 @@ describe 'lambda' do
   describe 'when lambda environment variables provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.lambda_environment_variables = {
           'VAR1' => 'VAL1',
           'VAR2' => 'VAL2'
@@ -278,6 +285,8 @@ describe 'lambda' do
   describe 'when publish is true' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.publish = true
       end
     end
@@ -292,6 +301,8 @@ describe 'lambda' do
   describe 'when publish is false' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.publish = false
       end
     end
@@ -306,6 +317,8 @@ describe 'lambda' do
   describe 'when include_vpc_access is true' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.include_vpc_access = true
         vars.vpc_id =
           output(role: :prerequisites, name: 'vpc_id')
@@ -329,6 +342,8 @@ describe 'lambda' do
   describe 'when include_vpc_access is false' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.include_vpc_access = false
       end
     end
@@ -355,6 +370,8 @@ describe 'lambda' do
   describe 'when tags provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = "handler.hello"
         vars.tags = {
           Thing1: 'value1',
           Thing2: 'value2'

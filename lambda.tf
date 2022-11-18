@@ -2,6 +2,8 @@ resource "aws_lambda_function" "lambda" {
   function_name = var.lambda_function_name
   description   = var.lambda_description
 
+  package_type = var.lambda_package_type
+
   filename         = var.lambda_zip_path
   handler          = var.lambda_handler
   source_code_hash = base64sha256(filebase64(var.lambda_zip_path))
