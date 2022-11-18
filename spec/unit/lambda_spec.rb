@@ -264,7 +264,8 @@ describe 'lambda' do
           .to(include_resource_creation(type: 'aws_lambda_function')
                 .with_attribute_value(
                   [:image_config, 0],
-                  a_hash_including(command: %w[echo hello])))
+                  a_hash_including(command: %w[echo hello])
+                ))
       end
     end
 
@@ -283,7 +284,8 @@ describe 'lambda' do
           .to(include_resource_creation(type: 'aws_lambda_function')
                 .with_attribute_value(
                   [:image_config, 0],
-                  a_hash_including(working_directory: '/tmp/dir')))
+                  a_hash_including(working_directory: '/tmp/dir')
+                ))
       end
     end
 
@@ -302,7 +304,8 @@ describe 'lambda' do
           .to(include_resource_creation(type: 'aws_lambda_function')
                 .with_attribute_value(
                   [:image_config, 0],
-                  a_hash_including(entry_point: %w[/bin/sh -c])))
+                  a_hash_including(entry_point: %w[/bin/sh -c])
+                ))
       end
     end
   end
