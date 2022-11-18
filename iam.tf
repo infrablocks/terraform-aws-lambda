@@ -12,7 +12,7 @@ data "aws_iam_policy_document" "lambda_execution_assume_role_policy" {
   }
 }
 
-data "aws_iam_policy_document" "lambda_execution_policy" {
+data "aws_iam_policy_document" "vpc_access_management_statement" {
   statement {
     effect = "Allow"
     actions = [
@@ -27,6 +27,9 @@ data "aws_iam_policy_document" "lambda_execution_policy" {
     ]
     resources = ["*"]
   }
+}
+
+data "aws_iam_policy_document" "log_management_statement" {
   statement {
     effect = "Allow"
     actions = [
@@ -40,13 +43,34 @@ data "aws_iam_policy_document" "lambda_execution_policy" {
   }
 }
 
+data "aws_iam_policy_document" "lambda_execution_role_policy" {
+  source_policy_documents = compact(
+    [
+      var.include_vpc_access && var.include_execution_role_policy_vpc_access_management_statement
+      ? data.aws_iam_policy_document.vpc_access_management_statement.json
+      : "",
+      var.include_execution_role_policy_log_management_statement
+      ? data.aws_iam_policy_document.log_management_statement.json
+      : ""
+    ]
+  )
+}
+
+locals {
+  default_assume_role_policy = data.aws_iam_policy_document.lambda_execution_assume_role_policy.json
+  default_execution_role_policy = data.aws_iam_policy_document.lambda_execution_role_policy.json
+
+  resolved_assume_role_policy = var.lambda_assume_role_policy != "" ? var.lambda_assume_role_policy : local.default_assume_role_policy
+  resolved_execution_role_policy = var.lambda_execution_role_policy != "" ? var.lambda_execution_role_policy : local.default_execution_role_policy
+}
+
 resource "aws_iam_role" "lambda_execution_role" {
-  assume_role_policy = var.lambda_assume_role_policy != "" ? var.lambda_assume_role_policy : data.aws_iam_policy_document.lambda_execution_assume_role_policy.json
+  assume_role_policy = local.resolved_assume_role_policy
   tags = local.resolved_tags
 }
 
 resource "aws_iam_role_policy" "lambda_execution_policy" {
   role = aws_iam_role.lambda_execution_role.id
-  policy = var.lambda_execution_role_policy != "" ? var.lambda_execution_role_policy : data.aws_iam_policy_document.lambda_execution_policy.json
+  policy =  local.resolved_execution_role_policy
 }
 

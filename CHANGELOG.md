@@ -3,6 +3,7 @@
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
 * This module is now compatible with Terraform 1.3 and higher.
+* This module is now compatible with the Terraform AWS provider 4.22 and higher.
 * The `lambda_assume_role` var is now called `lambda_assume_role_policy`.
 * The `lambda_execution_policy` var is now called
   `lambda_execution_role_policy`.
@@ -11,6 +12,23 @@ BACKWARDS INCOMPATIBILITIES / NOTES:
 * The `publish` var now accepts a boolean value rather than a "yes"/"no".
 * The `deploy_in_vpc` var now accepts a boolean value rather than a "yes"/"no",
   has been renamed to `include_vpc_access` and defaults to false.
+
+IMPROVEMENTS
+
+* Added support for using a container instead of a zip file to specify the 
+  lambda function, via the `lambda_package_type` variable, which defaults
+  to `"Zip"`, the `lambda_image_uri` variable and the `lambda_image_config`
+  variable. 
+
+  When `lambda_package_type` is `"Image"`, `lambda_image_uri` must be specified
+  and `lambda_zip_path`, `lambda_handler` and `lambda_runtime` should not be
+  specified.
+* The execution role created for use by the lambda function no longer includes
+  a statement for VPC access management unless `include_vpc_access` is `true`.
+* The execution role statements for VPC access management and log management
+  can now be disabled using the variables
+  `include_execution_role_policy_vpc_access_management_statement` and
+  `include_execution_role_policy_log_management_statement`.
 
 ## 1.0.0 (May 28th, 2021)
 

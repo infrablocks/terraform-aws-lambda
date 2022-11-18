@@ -37,6 +37,9 @@ module "lambda" {
   lambda_assume_role_policy    = var.lambda_assume_role_policy
   lambda_execution_role_policy = var.lambda_execution_role_policy
 
+  include_execution_role_policy_vpc_access_management_statement = var.include_execution_role_policy_vpc_access_management_statement
+  include_execution_role_policy_log_management_statement        = var.include_execution_role_policy_log_management_statement
+
   include_vpc_access         = var.include_vpc_access
   lambda_subnet_ids          = var.lambda_subnet_ids
   lambda_ingress_cidr_blocks = var.lambda_ingress_cidr_blocks

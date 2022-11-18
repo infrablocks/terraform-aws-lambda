@@ -26,6 +26,9 @@ RSpec::Matchers
     policy = JSON.parse(actual, symbolize_names: true)
 
     all_statements = policy[:Statement]
+
+    return false unless all_statements
+
     candidate_statements = all_statements.filter do |candidate_statement|
       expected_entries <= normalise(candidate_statement)
     end

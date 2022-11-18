@@ -82,26 +82,26 @@ describe 'execution role' do
               ))
     end
 
-    it 'allows VPC integration' do
+    it 'does not allow VPC access management' do
       expect(@plan)
-        .to(include_resource_creation(type: 'aws_iam_role_policy')
-              .with_attribute_value(
-                :policy,
-                a_policy_with_statement(
-                  Effect: 'Allow',
-                  Action: %w[
-                    ec2:CreateNetworkInterface
-                    ec2:DescribeNetworkInterfaces
-                    ec2:DeleteNetworkInterface
-                    ec2:DescribeSecurityGroups
-                    ec2:AssignPrivateIpAddresses
-                    ec2:UnassignPrivateIpAddresses
-                    ec2:DescribeSubnets
-                    ec2:DescribeVpcs
-                  ],
-                  Resource: '*'
-                )
-              ))
+        .not_to(include_resource_creation(type: 'aws_iam_role_policy')
+                  .with_attribute_value(
+                    :policy,
+                    a_policy_with_statement(
+                      Effect: 'Allow',
+                      Action: %w[
+                        ec2:CreateNetworkInterface
+                        ec2:DescribeNetworkInterfaces
+                        ec2:DeleteNetworkInterface
+                        ec2:DescribeSecurityGroups
+                        ec2:AssignPrivateIpAddresses
+                        ec2:UnassignPrivateIpAddresses
+                        ec2:DescribeSubnets
+                        ec2:DescribeVpcs
+                      ],
+                      Resource: '*'
+                    )
+                  ))
     end
 
     it 'outputs the IAM role name' do
@@ -115,7 +115,237 @@ describe 'execution role' do
     end
   end
 
-  describe 'when lambda assume role policy provided' do
+  describe 'when include_vpc_access is true' do
+    describe 'by default' do
+      before(:context) do
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+          vars.include_vpc_access = true
+        end
+      end
+
+      it 'allows log group management' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_iam_role_policy')
+                .with_attribute_value(
+                  :policy,
+                  a_policy_with_statement(
+                    Effect: 'Allow',
+                    Action: %w[
+                    logs:CreateLogGroup
+                    logs:CreateLogStream
+                    logs:PutLogEvents
+                  ],
+                    Resource: "arn:aws:logs:#{region}:#{account_id}:*"
+                  )
+                ))
+      end
+
+      it 'allows VPC access management' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_iam_role_policy')
+                .with_attribute_value(
+                  :policy,
+                  a_policy_with_statement(
+                    Effect: 'Allow',
+                    Action: %w[
+                    ec2:CreateNetworkInterface
+                    ec2:DescribeNetworkInterfaces
+                    ec2:DeleteNetworkInterface
+                    ec2:DescribeSecurityGroups
+                    ec2:AssignPrivateIpAddresses
+                    ec2:UnassignPrivateIpAddresses
+                    ec2:DescribeSubnets
+                    ec2:DescribeVpcs
+                  ],
+                    Resource: '*'
+                  )
+                ))
+      end
+    end
+
+    describe(
+      'when include_execution_role_policy_vpc_access_management_statement ' +
+        'is true'
+    ) do
+      before(:context) do
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+          vars.include_vpc_access = true
+          vars.include_execution_role_policy_vpc_access_management_statement =
+            true
+        end
+      end
+
+      it 'allows VPC access management' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_iam_role_policy')
+                .with_attribute_value(
+                  :policy,
+                  a_policy_with_statement(
+                    Effect: 'Allow',
+                    Action: %w[
+                      ec2:CreateNetworkInterface
+                      ec2:DescribeNetworkInterfaces
+                      ec2:DeleteNetworkInterface
+                      ec2:DescribeSecurityGroups
+                      ec2:AssignPrivateIpAddresses
+                      ec2:UnassignPrivateIpAddresses
+                      ec2:DescribeSubnets
+                      ec2:DescribeVpcs
+                    ],
+                    Resource: '*'
+                  )
+                ))
+      end
+    end
+
+    describe(
+      'when include_execution_role_policy_vpc_access_management_statement ' +
+        'is false'
+    ) do
+      before(:context) do
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+          vars.include_vpc_access = true
+          vars.include_execution_role_policy_vpc_access_management_statement =
+            false
+        end
+      end
+
+      it 'allows VPC access management' do
+        expect(@plan)
+          .not_to(include_resource_creation(type: 'aws_iam_role_policy')
+                    .with_attribute_value(
+                      :policy,
+                      a_policy_with_statement(
+                        Effect: 'Allow',
+                        Action: %w[
+                          ec2:CreateNetworkInterface
+                          ec2:DescribeNetworkInterfaces
+                          ec2:DeleteNetworkInterface
+                          ec2:DescribeSecurityGroups
+                          ec2:AssignPrivateIpAddresses
+                          ec2:UnassignPrivateIpAddresses
+                          ec2:DescribeSubnets
+                          ec2:DescribeVpcs
+                        ],
+                        Resource: '*'
+                      )
+                    ))
+      end
+    end
+  end
+
+  describe 'when include_vpc_access is false' do
+    before(:context) do
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = 'handler.hello'
+        vars.include_vpc_access = false
+      end
+    end
+
+    it 'allows log group management' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_iam_role_policy')
+              .with_attribute_value(
+                :policy,
+                a_policy_with_statement(
+                  Effect: 'Allow',
+                  Action: %w[
+                    logs:CreateLogGroup
+                    logs:CreateLogStream
+                    logs:PutLogEvents
+                  ],
+                  Resource: "arn:aws:logs:#{region}:#{account_id}:*"
+                )
+              ))
+    end
+
+    it 'does not allow VPC access management' do
+      expect(@plan)
+        .not_to(include_resource_creation(type: 'aws_iam_role_policy')
+                  .with_attribute_value(
+                    :policy,
+                    a_policy_with_statement(
+                      Effect: 'Allow',
+                      Action: %w[
+                        ec2:CreateNetworkInterface
+                        ec2:DescribeNetworkInterfaces
+                        ec2:DeleteNetworkInterface
+                        ec2:DescribeSecurityGroups
+                        ec2:AssignPrivateIpAddresses
+                        ec2:UnassignPrivateIpAddresses
+                        ec2:DescribeSubnets
+                        ec2:DescribeVpcs
+                      ],
+                      Resource: '*'
+                    )
+                  ))
+    end
+  end
+
+  describe 'when include_execution_role_policy_log_management_statement ' \
+           'is true' do
+    before(:context) do
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = 'handler.hello'
+        vars.include_execution_role_policy_log_management_statement = true
+      end
+    end
+
+    it 'allows log group management' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_iam_role_policy')
+              .with_attribute_value(
+                :policy,
+                a_policy_with_statement(
+                  Effect: 'Allow',
+                  Action: %w[
+                    logs:CreateLogGroup
+                    logs:CreateLogStream
+                    logs:PutLogEvents
+                  ],
+                  Resource: "arn:aws:logs:#{region}:#{account_id}:*"
+                )
+              ))
+    end
+  end
+
+  describe 'when include_execution_role_policy_log_management_statement ' \
+           'is false' do
+    before(:context) do
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = 'handler.hello'
+        vars.include_execution_role_policy_log_management_statement = false
+      end
+    end
+
+    it 'does not allow log group management' do
+      expect(@plan)
+        .not_to(include_resource_creation(type: 'aws_iam_role_policy')
+                  .with_attribute_value(
+                    :policy,
+                    a_policy_with_statement(
+                      Effect: 'Allow',
+                      Action: %w[
+                        logs:CreateLogGroup
+                        logs:CreateLogStream
+                        logs:PutLogEvents
+                      ],
+                      Resource: "arn:aws:logs:#{region}:#{account_id}:*"
+                    )
+                  ))
+    end
+  end
+
+  describe 'when lambda_assume_role_policy provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
@@ -142,7 +372,7 @@ describe 'execution role' do
     end
   end
 
-  describe 'when lambda execution role policy provided' do
+  describe 'when lambda_execution_role_policy provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
