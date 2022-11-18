@@ -3,7 +3,6 @@
 require 'bundler/setup'
 
 require 'aws-sdk'
-require 'docker-api'
 require 'rspec'
 require 'ruby_terraform'
 require 'rspec/terraform'
