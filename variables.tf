@@ -62,15 +62,16 @@ variable "lambda_image_uri" {
 variable "lambda_image_config" {
   description = "Container image configuration values that override the values in the container image Dockerfile."
   type = object({
-    command: string,
-    entry_point: string,
-    working_directory: string
+    command: optional(list(string)),
+    entry_point: optional(list(string)),
+    working_directory: optional(string)
   })
   default = {
     command: null,
     entry_point: null,
     working_directory: null
   }
+  nullable = false
 }
 
 variable "lambda_timeout" {

@@ -12,6 +12,16 @@ resource "aws_lambda_function" "lambda" {
 
   image_uri = var.lambda_package_type == "Image" ? var.lambda_image_uri : null
 
+  dynamic "image_config" {
+    for_each = var.lambda_package_type == "Image" ? [var.lambda_image_config] : []
+
+    content {
+      command = image_config.value.command
+      working_directory = image_config.value.working_directory
+      entry_point = image_config.value.entry_point
+    }
+  }
+
   role = aws_iam_role.lambda_execution_role.arn
 
   timeout                        = var.lambda_timeout

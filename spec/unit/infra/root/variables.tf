@@ -27,6 +27,15 @@ variable "lambda_image_uri" {
   default = null
 }
 
+variable "lambda_image_config" {
+  type = object({
+    command: optional(list(string)),
+    working_directory: optional(string),
+    entry_point: optional(list(string))
+  })
+  default = {}
+}
+
 variable "lambda_timeout" {
   default = null
 }

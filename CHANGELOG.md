@@ -2,7 +2,7 @@
 
 BACKWARDS INCOMPATIBILITIES / NOTES:
 
-* This module is now compatible with Terraform 1.1 and higher.
+* This module is now compatible with Terraform 1.3 and higher.
 * The `lambda_assume_role` var is now called `lambda_assume_role_policy`.
 * The `lambda_execution_policy` var is now called
   `lambda_execution_role_policy`.

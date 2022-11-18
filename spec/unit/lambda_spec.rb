@@ -248,6 +248,63 @@ describe 'lambda' do
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(:image_uri, @image_uri))
     end
+
+    describe 'when image config command provided' do
+      before(:context) do
+        @image_uri = output(role: :prerequisites, name: 'image_uri')
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_package_type = 'Image'
+          vars.lambda_image_uri = @image_uri
+          vars.lambda_image_config = { command: %w[echo hello] }
+        end
+      end
+
+      it 'uses the provided image command' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:image_config, 0],
+                  a_hash_including(command: %w[echo hello])))
+      end
+    end
+
+    describe 'when image config working directory provided' do
+      before(:context) do
+        @image_uri = output(role: :prerequisites, name: 'image_uri')
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_package_type = 'Image'
+          vars.lambda_image_uri = @image_uri
+          vars.lambda_image_config = { working_directory: '/tmp/dir' }
+        end
+      end
+
+      it 'uses the provided image working directory' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:image_config, 0],
+                  a_hash_including(working_directory: '/tmp/dir')))
+      end
+    end
+
+    describe 'when image config entry point provided' do
+      before(:context) do
+        @image_uri = output(role: :prerequisites, name: 'image_uri')
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_package_type = 'Image'
+          vars.lambda_image_uri = @image_uri
+          vars.lambda_image_config = { entry_point: %w[/bin/sh -c] }
+        end
+      end
+
+      it 'uses the provided image entry point' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:image_config, 0],
+                  a_hash_including(entry_point: %w[/bin/sh -c])))
+      end
+    end
   end
 
   describe 'when lambda runtime provided' do
