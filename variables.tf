@@ -92,15 +92,22 @@ variable "lambda_reserved_concurrent_executions" {
   nullable    = false
 }
 
-variable "lambda_execution_role_policy" {
-  description = "The inline AWS execution role policy to use for the lambda."
+variable "lambda_execution_role_policy_document" {
+  description = "A policy document for the execution role policy assumed by the lambda during execution."
   type        = string
   default     = ""
   nullable    = false
 }
 
-variable "lambda_assume_role_policy" {
-  description = "An inline AWS role policy which the lambda should assume during execution."
+variable "lambda_execution_role_source_policy_document" {
+  description = "A source policy document to include in the default execution role policy created for use by the lambda."
+  type        = string
+  default     = ""
+  nullable    = false
+}
+
+variable "lambda_assume_role_policy_document" {
+  description = "A policy document for the assume role policy allowing the lambda service to assume the created execution role."
   type        = string
   default     = ""
   nullable    = false

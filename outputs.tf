@@ -34,8 +34,11 @@ output "lambda_source_code_size" {
 output "lambda_version" {
   value = aws_lambda_function.lambda.version
 }
+output "security_group_id" {
+  value = var.include_vpc_access ? aws_security_group.lambda_security_group[0].id : null
+}
 output "security_group_name" {
-  value = var.include_vpc_access ? aws_security_group.sg_lambda[0].name : null
+  value = var.include_vpc_access ? aws_security_group.lambda_security_group[0].name : null
 }
 output "iam_role_name" {
   value = aws_iam_role.lambda_execution_role.name

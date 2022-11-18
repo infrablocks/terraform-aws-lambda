@@ -37,6 +37,9 @@ output "lambda_version" {
 output "security_group_name" {
   value = module.lambda.security_group_name
 }
+output "security_group_id" {
+  value = module.lambda.security_group_id
+}
 output "iam_role_name" {
   value = module.lambda.iam_role_name
 }

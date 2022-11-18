@@ -133,10 +133,10 @@ describe 'execution role' do
                   a_policy_with_statement(
                     Effect: 'Allow',
                     Action: %w[
-                    logs:CreateLogGroup
-                    logs:CreateLogStream
-                    logs:PutLogEvents
-                  ],
+                      logs:CreateLogGroup
+                      logs:CreateLogStream
+                      logs:PutLogEvents
+                    ],
                     Resource: "arn:aws:logs:#{region}:#{account_id}:*"
                   )
                 ))
@@ -150,15 +150,15 @@ describe 'execution role' do
                   a_policy_with_statement(
                     Effect: 'Allow',
                     Action: %w[
-                    ec2:CreateNetworkInterface
-                    ec2:DescribeNetworkInterfaces
-                    ec2:DeleteNetworkInterface
-                    ec2:DescribeSecurityGroups
-                    ec2:AssignPrivateIpAddresses
-                    ec2:UnassignPrivateIpAddresses
-                    ec2:DescribeSubnets
-                    ec2:DescribeVpcs
-                  ],
+                      ec2:CreateNetworkInterface
+                      ec2:DescribeNetworkInterfaces
+                      ec2:DeleteNetworkInterface
+                      ec2:DescribeSecurityGroups
+                      ec2:AssignPrivateIpAddresses
+                      ec2:UnassignPrivateIpAddresses
+                      ec2:DescribeSubnets
+                      ec2:DescribeVpcs
+                    ],
                     Resource: '*'
                   )
                 ))
@@ -166,8 +166,8 @@ describe 'execution role' do
     end
 
     describe(
-      'when include_execution_role_policy_vpc_access_management_statement ' +
-        'is true'
+      'when include_execution_role_policy_vpc_access_management_statement ' \
+      'is true'
     ) do
       before(:context) do
         @plan = plan(role: :root) do |vars|
@@ -203,8 +203,8 @@ describe 'execution role' do
     end
 
     describe(
-      'when include_execution_role_policy_vpc_access_management_statement ' +
-        'is false'
+      'when include_execution_role_policy_vpc_access_management_statement ' \
+      'is false'
     ) do
       before(:context) do
         @plan = plan(role: :root) do |vars|
@@ -345,12 +345,55 @@ describe 'execution role' do
     end
   end
 
-  describe 'when lambda_assume_role_policy provided' do
+  describe 'when lambda_execution_role_source_policy_document provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
         vars.lambda_handler = 'handler.hello'
-        vars.lambda_assume_role_policy =
+        vars.lambda_execution_role_source_policy_document =
+          File.read('spec/unit/test-execution-role-source-policy.json')
+      end
+    end
+
+    it 'includes the contents of the provided source policy document in the ' \
+       'execution role policy' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_iam_role_policy')
+              .with_attribute_value(
+                :policy,
+                a_policy_with_statement(
+                  Sid: 'TestExtraExecutionRolePolicyStatement',
+                  Effect: 'Allow',
+                  Action: 's3:GetObject',
+                  Resource: ['*']
+                )
+              ))
+    end
+
+    it 'includes the default statements in the execution role policy' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_iam_role_policy')
+              .with_attribute_value(
+                :policy,
+                a_policy_with_statement(
+                  Effect: 'Allow',
+                  Action: %w[
+                    logs:CreateLogGroup
+                    logs:CreateLogStream
+                    logs:PutLogEvents
+                  ],
+                  Resource: "arn:aws:logs:#{region}:#{account_id}:*"
+                )
+              ))
+    end
+  end
+
+  describe 'when lambda_assume_role_policy_document provided' do
+    before(:context) do
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = 'handler.hello'
+        vars.lambda_assume_role_policy_document =
           File.read('spec/unit/test-assume-role-policy.json')
       end
     end
@@ -372,12 +415,12 @@ describe 'execution role' do
     end
   end
 
-  describe 'when lambda_execution_role_policy provided' do
+  describe 'when lambda_execution_role_policy_document provided' do
     before(:context) do
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
         vars.lambda_handler = 'handler.hello'
-        vars.lambda_execution_role_policy =
+        vars.lambda_execution_role_policy_document =
           File.read('spec/unit/test-execution-role-policy.json')
       end
     end
@@ -391,7 +434,7 @@ describe 'execution role' do
                   Sid: 'TestExtraExecutionRolePolicyStatement',
                   Effect: 'Allow',
                   Action: 's3:GetObject',
-                  Resources: ['*']
+                  Resource: ['*']
                 )
               ))
     end

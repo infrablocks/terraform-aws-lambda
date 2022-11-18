@@ -40,7 +40,7 @@ resource "aws_lambda_function" "lambda" {
   }
 
   vpc_config {
-    security_group_ids = var.include_vpc_access ? [aws_security_group.sg_lambda[0].id] : []
+    security_group_ids = var.include_vpc_access ? [aws_security_group.lambda_security_group[0].id] : []
     subnet_ids         = var.include_vpc_access ? var.lambda_subnet_ids : []
   }
 }

@@ -45,10 +45,13 @@ variable "lambda_memory_size" {
 variable "lambda_reserved_concurrent_executions" {
   default = null
 }
-variable "lambda_execution_role_policy" {
+variable "lambda_execution_role_policy_document" {
   default = null
 }
-variable "lambda_assume_role_policy" {
+variable "lambda_execution_role_source_policy_document" {
+  default = null
+}
+variable "lambda_assume_role_policy_document" {
   default = null
 }
 

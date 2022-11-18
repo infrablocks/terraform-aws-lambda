@@ -4,9 +4,10 @@ BACKWARDS INCOMPATIBILITIES / NOTES:
 
 * This module is now compatible with Terraform 1.3 and higher.
 * This module is now compatible with the Terraform AWS provider 4.22 and higher.
-* The `lambda_assume_role` var is now called `lambda_assume_role_policy`.
+* The `lambda_assume_role` var is now called
+  `lambda_assume_role_policy_document`.
 * The `lambda_execution_policy` var is now called
-  `lambda_execution_role_policy`.
+  `lambda_execution_role_policy_document`.
 * The `account_id` var has been removed and the current account is instead 
   determined from a data resource.
 * The `publish` var now accepts a boolean value rather than a "yes"/"no".

@@ -34,8 +34,9 @@ module "lambda" {
   lambda_memory_size                    = var.lambda_memory_size
   lambda_reserved_concurrent_executions = var.lambda_reserved_concurrent_executions
 
-  lambda_assume_role_policy    = var.lambda_assume_role_policy
-  lambda_execution_role_policy = var.lambda_execution_role_policy
+  lambda_assume_role_policy_document           = var.lambda_assume_role_policy_document
+  lambda_execution_role_policy_document        = var.lambda_execution_role_policy_document
+  lambda_execution_role_source_policy_document = var.lambda_execution_role_source_policy_document
 
   include_execution_role_policy_vpc_access_management_statement = var.include_execution_role_policy_vpc_access_management_statement
   include_execution_role_policy_log_management_statement        = var.include_execution_role_policy_log_management_statement
