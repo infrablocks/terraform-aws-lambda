@@ -86,7 +86,7 @@ jobs:
       - checkout
       - configure_tools
       - run:
-          no_output_timeout: 30m
+          no_output_timeout: 60m
           command: ./scripts/ci/steps/test.sh
       - store_artifacts:
           path: build/logs
