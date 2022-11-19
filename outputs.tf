@@ -31,6 +31,9 @@ output "lambda_source_code_hash" {
 output "lambda_source_code_size" {
   value = aws_lambda_function.lambda.source_code_size
 }
+output "lambda_image_uri" {
+  value = aws_lambda_function.lambda.image_uri
+}
 output "lambda_version" {
   value = aws_lambda_function.lambda.version
 }

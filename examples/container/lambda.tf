@@ -9,10 +9,9 @@ module "lambda" {
 
   lambda_function_name = "test-lambda-resource-${var.deployment_identifier}"
   lambda_description   = "test terraform-aws-lambda"
-  lambda_runtime       = "nodejs16.x"
 
-  lambda_zip_path = "${path.root}/lambda.zip"
-  lambda_handler  = "handler.hello"
+  lambda_package_type = "Image"
+  lambda_image_uri = local.image_uri
 
   lambda_environment_variables = {
     "TEST_ENV_VARIABLE" : "value"

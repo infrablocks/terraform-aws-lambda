@@ -29,6 +29,7 @@ run/logs/
 
 # Terraform
 spec/**/*.tgz
+examples/**/*.tgz
 state/
 .terraform
 *.tfplan
