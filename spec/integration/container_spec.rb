@@ -9,9 +9,6 @@ describe 'container' do
   let(:lambda_image_uri) do
     output(role: :container, name: 'lambda_image_uri')
   end
-  let(:security_group_name) do
-    output(role: :container, name: 'security_group_name')
-  end
 
   before(:context) do
     apply(role: :container)
@@ -42,11 +39,5 @@ describe 'container' do
       expect(lambda_function.code.image_uri)
         .to(eq(lambda_image_uri))
     end
-  end
-
-  describe 'security group' do
-    subject { security_group(security_group_name) }
-
-    it { is_expected.to exist }
   end
 end

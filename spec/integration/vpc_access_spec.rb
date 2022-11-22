@@ -2,21 +2,24 @@
 
 require 'spec_helper'
 
-describe 'zip package' do
+describe 'vpc access' do
   let(:lambda_function_name) do
-    output(role: :zip_package, name: 'lambda_function_name')
+    output(role: :vpc_access, name: 'lambda_function_name')
   end
   let(:lambda_handler) do
-    output(role: :zip_package, name: 'lambda_handler')
+    output(role: :vpc_access, name: 'lambda_handler')
+  end
+  let(:security_group_name) do
+    output(role: :vpc_access, name: 'security_group_name')
   end
 
   before(:context) do
-    apply(role: :zip_package)
+    apply(role: :vpc_access)
   end
 
   after(:context) do
     destroy(
-      role: :zip_package,
+      role: :vpc_access,
       only_if: -> { !ENV['FORCE_DESTROY'].nil? || ENV['SEED'].nil? }
     )
   end
@@ -31,7 +34,11 @@ describe 'zip package' do
     its(:package_type) { is_expected.to(eq('Zip')) }
     its(:handler) { is_expected.to(eq(lambda_handler)) }
     its(:runtime) { is_expected.to(eq('nodejs16.x')) }
+  end
 
-    it { is_expected.to(have_env_vars(['TEST_ENV_VARIABLE'])) }
+  describe 'security group' do
+    subject { security_group(security_group_name) }
+
+    it { is_expected.to exist }
   end
 end
