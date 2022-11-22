@@ -1,6 +1,6 @@
 ---
-configuration_directory: "%{cwd}/examples/zip_package"
-state_file: "%{cwd}/state/zip_package.tfstate"
+configuration_directory: "%{cwd}/examples/vpc_access"
+state_file: "%{cwd}/state/vpc_access.tfstate"
 vars:
   region: "%{hiera('region')}"
 
