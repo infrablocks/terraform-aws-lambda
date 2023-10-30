@@ -541,7 +541,7 @@ describe 'lambda' do
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(
                 [:vpc_config, 0, :subnet_ids],
-                contain_exactly(*subnet_ids)
+                match_array(subnet_ids)
               ))
     end
   end
