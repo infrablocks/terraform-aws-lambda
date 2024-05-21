@@ -84,7 +84,7 @@ describe 'lambda' do
               .with_attribute_value(:runtime, 'nodejs14.x'))
     end
 
-    it 'does not include any architectures'  do
+    it 'does not include any architectures' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(:architectures, a_nil_value))
