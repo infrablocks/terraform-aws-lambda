@@ -84,6 +84,12 @@ describe 'lambda' do
               .with_attribute_value(:runtime, 'nodejs14.x'))
     end
 
+    it 'does not include any architectures'  do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(:architectures, a_nil_value))
+    end
+
     it 'uses a timeout of 30 seconds' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_lambda_function')
@@ -413,6 +419,22 @@ describe 'lambda' do
           .to(include_resource_creation(type: 'aws_lambda_function')
                 .with_attribute_value(:runtime, 'nodejs16.x'))
       end
+    end
+  end
+
+  describe 'when lambda architectures provided' do
+    before(:context) do
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = 'handler.hello'
+        vars.lambda_architectures = ['arm64']
+      end
+    end
+
+    it 'uses the provided architectures' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(:architectures, ['arm64']))
     end
   end
 

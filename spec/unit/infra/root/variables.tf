@@ -22,6 +22,10 @@ variable "lambda_handler" {
 variable "lambda_runtime" {
   default = null
 }
+variable "lambda_architectures" {
+  type = list(string)
+  default = null
+}
 
 variable "lambda_image_uri" {
   default = null

@@ -53,6 +53,12 @@ variable "lambda_runtime" {
   nullable    = false
 }
 
+variable "lambda_architectures" {
+  description = "The architectures to use for the lambda function"
+  type        = list(string)
+  default     = null
+}
+
 variable "lambda_image_uri" {
   description = "The ECR image URI containing the function's deployment package. Required when `lambda_package_type` is \"Image\"."
   type        = string

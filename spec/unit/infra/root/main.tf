@@ -23,6 +23,7 @@ module "lambda" {
   lambda_zip_path = var.lambda_zip_path
   lambda_handler  = var.lambda_handler
   lambda_runtime  = var.lambda_runtime
+  lambda_architectures  = var.lambda_architectures
 
   lambda_image_uri = var.lambda_image_uri
 

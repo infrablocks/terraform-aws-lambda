@@ -10,6 +10,8 @@ resource "aws_lambda_function" "lambda" {
   source_code_hash = var.lambda_package_type == "Zip" ? base64sha256(filebase64(var.lambda_zip_path)) : null
   runtime          = var.lambda_package_type == "Zip" ? var.lambda_runtime : null
 
+  architectures = var.lambda_architectures
+
   image_uri = var.lambda_package_type == "Image" ? var.lambda_image_uri : null
 
   dynamic "image_config" {
