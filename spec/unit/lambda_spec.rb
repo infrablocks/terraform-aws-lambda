@@ -661,7 +661,7 @@ describe 'lambda' do
           log_format: 'JSON',
           log_group: @log_group_name,
           application_log_level: 'INFO',
-          system_log_level: 'DEBUG',
+          system_log_level: 'DEBUG'
         }
       end
     end
@@ -709,7 +709,7 @@ describe 'lambda' do
         vars.lambda_zip_path = 'lambda.zip'
         vars.lambda_handler = 'handler.hello'
         vars.lambda_tracing_config = {
-          mode: 'Active',
+          mode: 'Active'
         }
       end
     end
