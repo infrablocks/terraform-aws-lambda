@@ -80,6 +80,17 @@ variable "lambda_image_config" {
   nullable = false
 }
 
+variable "lambda_logging_config" {
+  description = "Advanced logging configuration for the lambda"
+  type = object({
+    log_format: string,
+    log_group: optional(string)
+    application_log_level: optional(string),
+    system_log_level: optional(string)
+  })
+  default = null
+}
+
 variable "lambda_timeout" {
   description = "The timeout period to use for the lambda function"
   default     = 30

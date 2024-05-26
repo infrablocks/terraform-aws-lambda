@@ -25,3 +25,7 @@ output "repository_url" {
 output "image_uri" {
   value = "${aws_ecr_repository.test.repository_url}@${data.aws_ecr_image.test.image_digest}"
 }
+
+output "log_group_name" {
+  value = aws_cloudwatch_log_group.test.name
+}

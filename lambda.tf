@@ -18,9 +18,20 @@ resource "aws_lambda_function" "lambda" {
     for_each = var.lambda_package_type == "Image" ? [var.lambda_image_config] : []
 
     content {
-      command = image_config.value.command
+      command           = image_config.value.command
       working_directory = image_config.value.working_directory
-      entry_point = image_config.value.entry_point
+      entry_point       = image_config.value.entry_point
+    }
+  }
+
+  dynamic "logging_config" {
+    for_each = var.lambda_logging_config != null ? [var.lambda_logging_config] : []
+
+    content {
+      log_format            = logging_config.value.log_format
+      log_group             = logging_config.value.log_group
+      application_log_level = logging_config.value.application_log_level
+      system_log_level      = logging_config.value.system_log_level
     }
   }
 

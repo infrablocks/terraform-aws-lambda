@@ -13,8 +13,12 @@ module "base_network" {
 }
 
 resource "aws_ecr_repository" "test" {
-  name = "test/${var.component}-${var.deployment_identifier}"
+  name         = "test/${var.component}-${var.deployment_identifier}"
   force_delete = true
+}
+
+resource "aws_cloudwatch_log_group" "test" {
+  name = "/test/loggroup/${var.component}-${var.deployment_identifier}"
 }
 
 resource "dockerless_remote_image" "test" {

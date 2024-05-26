@@ -40,6 +40,16 @@ variable "lambda_image_config" {
   default = {}
 }
 
+variable "lambda_logging_config" {
+  type = object({
+    log_format: string,
+    log_group: optional(string),
+    application_log_level: optional(string),
+    system_log_level: optional(string)
+  })
+  default = null
+}
+
 variable "lambda_timeout" {
   default = null
 }

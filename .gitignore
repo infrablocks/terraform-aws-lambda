@@ -27,6 +27,7 @@ run/logs/
 
 # RSpec
 .rspec_status
+spec/unit/infra/prerequisites/*.tgz
 
 # Terraform
 state/
