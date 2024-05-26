@@ -50,6 +50,13 @@ variable "lambda_logging_config" {
   default = null
 }
 
+variable "lambda_tracing_config" {
+  type = object({
+    mode: string
+  })
+  default = null
+}
+
 variable "lambda_timeout" {
   default = null
 }

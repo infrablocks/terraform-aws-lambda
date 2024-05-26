@@ -153,6 +153,15 @@ describe 'lambda' do
               ))
     end
 
+    it 'does not include any tracing configuration' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(
+                :tracing_config,
+                a_nil_value
+              ))
+    end
+
     it 'outputs the lambda ID' do
       expect(@plan)
         .to(include_output_creation(name: 'lambda_id'))
@@ -690,6 +699,27 @@ describe 'lambda' do
               .with_attribute_value(
                 [:logging_config, 0, :system_log_level],
                 'DEBUG'
+              ))
+    end
+  end
+
+  describe 'when tracing configuration provided' do
+    before(:context) do
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = 'handler.hello'
+        vars.lambda_tracing_config = {
+          mode: 'Active',
+        }
+      end
+    end
+
+    it 'uses the provided tracing mode' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(
+                [:tracing_config, 0, :mode],
+                'Active'
               ))
     end
   end

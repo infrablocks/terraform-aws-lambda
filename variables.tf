@@ -91,6 +91,14 @@ variable "lambda_logging_config" {
   default = null
 }
 
+variable "lambda_tracing_config" {
+  description = "Tracing configuration for the lambda"
+  type = object({
+    mode: string,
+  })
+  default = null
+}
+
 variable "lambda_timeout" {
   description = "The timeout period to use for the lambda function"
   default     = 30

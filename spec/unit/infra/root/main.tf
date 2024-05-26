@@ -30,6 +30,7 @@ module "lambda" {
   lambda_image_config = var.lambda_image_config
 
   lambda_logging_config = var.lambda_logging_config
+  lambda_tracing_config = var.lambda_tracing_config
 
   lambda_environment_variables = var.lambda_environment_variables
 

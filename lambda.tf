@@ -35,6 +35,14 @@ resource "aws_lambda_function" "lambda" {
     }
   }
 
+  dynamic "tracing_config" {
+    for_each = var.lambda_tracing_config != null ? [var.lambda_tracing_config] : []
+
+    content {
+      mode = tracing_config.value.mode
+    }
+  }
+
   role = aws_iam_role.lambda_execution_role.arn
 
   timeout                        = var.lambda_timeout
