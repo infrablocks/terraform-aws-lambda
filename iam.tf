@@ -43,6 +43,17 @@ data "aws_iam_policy_document" "log_management_statement" {
   }
 }
 
+data "aws_iam_policy_document" "tracing_statement" {
+  statement {
+    effect = "Allow"
+    actions = [
+      "xray:PutTraceSegments",
+      "xray:PutTelemetryRecords"
+    ]
+    resources = ["*"]
+  }
+}
+
 data "aws_iam_policy_document" "lambda_execution_role_policy_document" {
   source_policy_documents = compact(
     [
@@ -51,6 +62,9 @@ data "aws_iam_policy_document" "lambda_execution_role_policy_document" {
       : "",
       var.include_execution_role_policy_log_management_statement
       ? data.aws_iam_policy_document.log_management_statement.json
+      : "",
+      var.lambda_tracing_config != null && var.include_execution_role_policy_tracing_statement
+      ? data.aws_iam_policy_document.tracing_statement.json
       : "",
       var.lambda_execution_role_source_policy_document
     ]

@@ -111,6 +111,10 @@ variable "include_execution_role_policy_log_management_statement" {
   type = bool
   default = null
 }
+variable "include_execution_role_policy_tracing_statement" {
+  type = bool
+  default = null
+}
 variable "publish" {
   type = bool
   default = null

@@ -104,6 +104,22 @@ describe 'execution role' do
                   ))
     end
 
+    it 'does not allow tracing' do
+      expect(@plan)
+        .not_to(include_resource_creation(type: 'aws_iam_role_policy')
+                  .with_attribute_value(
+                    :policy,
+                    a_policy_with_statement(
+                      Effect: 'Allow',
+                      Action: %w[
+                        xray:PutTraceSegments
+                        xray:PutTelemetryRecords
+                      ],
+                      Resource: '*'
+                    )
+                  ))
+    end
+
     it 'outputs the IAM role name' do
       expect(@plan)
         .to(include_output_creation(name: 'iam_role_name'))
@@ -216,7 +232,7 @@ describe 'execution role' do
         end
       end
 
-      it 'allows VPC access management' do
+      it 'does not allow VPC access management' do
         expect(@plan)
           .not_to(include_resource_creation(type: 'aws_iam_role_policy')
                     .with_attribute_value(
@@ -439,4 +455,97 @@ describe 'execution role' do
               ))
     end
   end
+
+  describe 'when lambda_tracing_config is provided' do
+    describe 'by default' do
+      before(:context) do
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+          vars.lambda_tracing_config = {
+            mode: 'Active'
+          }
+        end
+      end
+
+      it 'allows tracing' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_iam_role_policy')
+                .with_attribute_value(
+                  :policy,
+                  a_policy_with_statement(
+                    Effect: 'Allow',
+                    Action: %w[
+                      xray:PutTraceSegments
+                      xray:PutTelemetryRecords
+                    ],
+                    Resource: '*'
+                  )
+                ))
+      end
+    end
+
+    describe(
+      'when include_execution_role_policy_tracing_statement is true'
+    ) do
+      before(:context) do
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+          vars.lambda_tracing_config = {
+            mode: 'Active'
+          }
+          vars.include_execution_role_policy_tracing_statement = true
+        end
+      end
+
+      it 'allows tracing' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_iam_role_policy')
+                .with_attribute_value(
+                  :policy,
+                  a_policy_with_statement(
+                    Effect: 'Allow',
+                    Action: %w[
+                      xray:PutTraceSegments
+                      xray:PutTelemetryRecords
+                    ],
+                    Resource: '*'
+                  )
+                ))
+      end
+    end
+
+    describe(
+      'when include_execution_role_policy_tracing_statement is false'
+    ) do
+      before(:context) do
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+          vars.lambda_tracing_config = {
+            mode: 'Active'
+          }
+          vars.include_execution_role_policy_tracing_statement = false
+        end
+      end
+
+      it 'does not allow tracing' do
+        expect(@plan)
+          .not_to(include_resource_creation(type: 'aws_iam_role_policy')
+                .with_attribute_value(
+                  :policy,
+                  a_policy_with_statement(
+                    Effect: 'Allow',
+                    Action: %w[
+                      xray:PutTraceSegments
+                      xray:PutTelemetryRecords
+                    ],
+                    Resource: '*'
+                  )
+                ))
+      end
+    end
+  end
+
 end

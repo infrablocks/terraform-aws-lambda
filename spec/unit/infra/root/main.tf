@@ -20,10 +20,10 @@ module "lambda" {
 
   lambda_package_type = var.lambda_package_type
 
-  lambda_zip_path = var.lambda_zip_path
-  lambda_handler  = var.lambda_handler
-  lambda_runtime  = var.lambda_runtime
-  lambda_architectures  = var.lambda_architectures
+  lambda_zip_path      = var.lambda_zip_path
+  lambda_handler       = var.lambda_handler
+  lambda_runtime       = var.lambda_runtime
+  lambda_architectures = var.lambda_architectures
 
   lambda_image_uri = var.lambda_image_uri
 
@@ -44,6 +44,7 @@ module "lambda" {
 
   include_execution_role_policy_vpc_access_management_statement = var.include_execution_role_policy_vpc_access_management_statement
   include_execution_role_policy_log_management_statement        = var.include_execution_role_policy_log_management_statement
+  include_execution_role_policy_tracing_statement               = var.include_execution_role_policy_tracing_statement
 
   include_vpc_access         = var.include_vpc_access
   lambda_subnet_ids          = var.lambda_subnet_ids

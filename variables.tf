@@ -174,6 +174,13 @@ variable "include_execution_role_policy_log_management_statement" {
   nullable = false
 }
 
+variable "include_execution_role_policy_tracing_statement" {
+  description = "Whether or not to include a execution role policy statement to allow lambda tracing. Defaults to `true`."
+  type = bool
+  default = true
+  nullable = false
+}
+
 variable "publish" {
   description = "Whether or not to publish creation / change as a new lambda function version."
   type        = bool
