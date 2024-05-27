@@ -547,5 +547,4 @@ describe 'execution role' do
       end
     end
   end
-
 end
