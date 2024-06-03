@@ -4,6 +4,10 @@ require 'spec_helper'
 require 'base64'
 require 'digest'
 
+RSpec::Matchers.define_negated_matcher(
+  :a_non_nil_value, :a_nil_value
+)
+
 describe 'lambda' do
   let(:component) do
     var(role: :root, name: 'component')
@@ -144,11 +148,38 @@ describe 'lambda' do
               ))
     end
 
-    it 'does not include any logging configuration' do
+    it 'uses created log group' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(
-                :logging_config,
+                [:logging_config, 0, :log_group],
+                a_non_nil_value
+              ))
+    end
+
+    it 'uses a log format of Text' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(
+                [:logging_config, 0, :log_format],
+                "Text"
+              ))
+    end
+
+    it 'does not set an application log level' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(
+                [:logging_config, 0, :application_log_level],
+                a_nil_value
+              ))
+    end
+
+    it 'does not set a system log level' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(
+                [:logging_config, 0, :system_log_level],
                 a_nil_value
               ))
     end

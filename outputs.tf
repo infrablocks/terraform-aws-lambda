@@ -37,6 +37,9 @@ output "lambda_image_uri" {
 output "lambda_version" {
   value = aws_lambda_function.lambda.version
 }
+output "lambda_log_group_name" {
+  value = var.include_lambda_log_group ? aws_cloudwatch_log_group.lambda["default"].name : null
+}
 output "security_group_id" {
   value = var.include_vpc_access ? aws_security_group.lambda_security_group[0].id : null
 }

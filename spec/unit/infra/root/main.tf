@@ -51,6 +51,8 @@ module "lambda" {
   lambda_ingress_cidr_blocks = var.lambda_ingress_cidr_blocks
   lambda_egress_cidr_blocks  = var.lambda_egress_cidr_blocks
 
+  include_lambda_log_group = var.include_lambda_log_group
+
   publish = var.publish
 
   tags = var.tags

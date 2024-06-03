@@ -103,6 +103,10 @@ variable "include_vpc_access" {
   type = bool
   default = null
 }
+variable "include_lambda_log_group" {
+  type = bool
+  default = null
+}
 variable "include_execution_role_policy_vpc_access_management_statement" {
   type = bool
   default = null

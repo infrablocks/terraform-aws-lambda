@@ -24,15 +24,11 @@ resource "aws_lambda_function" "lambda" {
     }
   }
 
-  dynamic "logging_config" {
-    for_each = var.lambda_logging_config != null ? [var.lambda_logging_config] : []
-
-    content {
-      log_format            = logging_config.value.log_format
-      log_group             = logging_config.value.log_group
-      application_log_level = logging_config.value.application_log_level
-      system_log_level      = logging_config.value.system_log_level
-    }
+  logging_config {
+    log_format            = var.lambda_logging_config != null ? var.lambda_logging_config.log_format : "Text"
+    log_group             = var.lambda_logging_config != null ? var.lambda_logging_config.log_group : var.include_lambda_log_group == true ? aws_cloudwatch_log_group.lambda["default"].name : null
+    application_log_level = var.lambda_logging_config != null ? var.lambda_logging_config.application_log_level : null
+    system_log_level      = var.lambda_logging_config != null ? var.lambda_logging_config.system_log_level: null
   }
 
   dynamic "tracing_config" {

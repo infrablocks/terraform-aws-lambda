@@ -30,6 +30,18 @@ IMPROVEMENTS
   can now be disabled using the variables
   `include_execution_role_policy_vpc_access_management_statement` and
   `include_execution_role_policy_log_management_statement`.
+* The target lambda architectures can now be provided to the lambda using the
+  `lambda_architectures` variable.
+* Tracing configuration for the lambda can now be specified using the
+  `lambda_tracing_config` variable, and a corresponding tracing execution role
+  statement is added to the role when this variable is present.
+* Logging configuration for the lambda can now be specified using the
+  `lambda_logging_config` variable.
+* A log group is now created for the lambda unless the 
+  `include_lambda_log_group` variable is false. This log group is configured as
+  the log destination for the lambda unless the `lambda_logging_config` 
+  variable includes a `log_group` parameter, referring to a log group name, in
+  which case the provided log group is used.
 
 ## 1.0.0 (May 28th, 2021)
 

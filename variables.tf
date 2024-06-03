@@ -160,6 +160,13 @@ variable "include_vpc_access" {
   nullable    = false
 }
 
+variable "include_lambda_log_group" {
+  description = "Whether or not to create a log group for the lambda."
+  type        = bool
+  default     = true
+  nullable    = false
+}
+
 variable "include_execution_role_policy_vpc_access_management_statement" {
   description = "Whether or not to include a execution role policy statement to allow network management for VPC access. Defaults to `true`."
   type = bool
