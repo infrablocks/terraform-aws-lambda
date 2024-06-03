@@ -162,7 +162,7 @@ describe 'lambda' do
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(
                 [:logging_config, 0, :log_format],
-                "Text"
+                'Text'
               ))
     end
 
