@@ -6,6 +6,3 @@ vars:
 
   component: "%{hiera('component')}"
   deployment_identifier: "%{hiera('deployment_identifier')}"
-
-  lambda_function_name: "%{hiera('lambda_function_name')}"
-  lambda_description: "%{hiera('lambda_description')}"

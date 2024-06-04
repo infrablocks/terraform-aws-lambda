@@ -14,6 +14,7 @@ module "lambda" {
 
   component             = var.component
   deployment_identifier = var.deployment_identifier
+  lambda_name           = var.lambda_name
 
   lambda_function_name = var.lambda_function_name
   lambda_description   = var.lambda_description

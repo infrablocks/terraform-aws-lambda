@@ -33,26 +33,12 @@ describe 'log_group' do
               .once)
     end
 
-    it 'includes the component in the log group name' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_cloudwatch_log_group')
-              .with_attribute_value(:name, match(/.*#{component}.*/)))
-    end
-
-    it 'includes the deployment identifier in the log group name' do
+    it 'generates a default log group name' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_cloudwatch_log_group')
               .with_attribute_value(
-                :name, match(/.*#{deployment_identifier}.*/)
-              ))
-    end
-
-    it 'includes the lambda function name in the log group name' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_cloudwatch_log_group')
-              .with_attribute_value(
-                :name, match(/.*#{lambda_function_name}.*/)
-              ))
+                :name,
+                "/#{component}/#{deployment_identifier}/lambda/default"))
     end
   end
 
@@ -86,26 +72,32 @@ describe 'log_group' do
               .once)
     end
 
-    it 'includes the component in the log group name' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_cloudwatch_log_group')
-              .with_attribute_value(:name, match(/.*#{component}.*/)))
-    end
-
-    it 'includes the deployment identifier in the log group name' do
+    it 'generates a default log group name' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_cloudwatch_log_group')
               .with_attribute_value(
-                :name, match(/.*#{deployment_identifier}.*/)
-              ))
+                :name,
+                "/#{component}/#{deployment_identifier}/lambda/default"))
+    end
+  end
+
+  describe 'when lambda_name provided' do
+    before(:context) do
+      @lambda_name = 'rest-api'
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = 'handler.hello'
+
+        vars.lambda_name = @lambda_name
+      end
     end
 
-    it 'includes the lambda function name in the log group name' do
+    it 'generates a log group name using the provided lambda name' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_cloudwatch_log_group')
               .with_attribute_value(
-                :name, match(/.*#{lambda_function_name}.*/)
-              ))
+                :name,
+                "/#{component}/#{deployment_identifier}/lambda/#{@lambda_name}"))
     end
   end
 end

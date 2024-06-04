@@ -1,7 +1,7 @@
 // noinspection ConflictingProperties
 resource "aws_lambda_function" "lambda" {
-  function_name = var.lambda_function_name
-  description   = var.lambda_description
+  function_name = coalesce(var.lambda_function_name, "${var.component}-${var.deployment_identifier}-${var.lambda_name}")
+  description   = coalesce(var.lambda_description, "Lambda function with name: ${var.lambda_name} for component: ${var.component} and deployment identifier: ${var.deployment_identifier}.")
 
   package_type = var.lambda_package_type
 

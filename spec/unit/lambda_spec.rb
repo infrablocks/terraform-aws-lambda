@@ -36,16 +36,22 @@ describe 'lambda' do
               .once)
     end
 
-    it 'uses the provided function name' do
+    it 'generates a default lambda function name' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:function_name, lambda_function_name))
+              .with_attribute_value(
+                :function_name,
+                "#{component}-#{deployment_identifier}-default"))
     end
 
-    it 'uses the provided description' do
+    it 'generates a default lambda description' do
       expect(@plan)
         .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(:description, lambda_description))
+              .with_attribute_value(
+                :description,
+                "Lambda function with name: default for component: " \
+                  "#{component} and deployment identifier: " \
+                  "#{deployment_identifier}."))
     end
 
     it 'uses a package type of "Zip"' do
@@ -251,6 +257,77 @@ describe 'lambda' do
     it 'outputs the lambda version' do
       expect(@plan)
         .to(include_output_creation(name: 'lambda_version'))
+    end
+  end
+
+  describe 'when lambda name provided' do
+    before(:context) do
+      @lambda_name = 'rest-api'
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = 'handler.hello'
+
+        vars.lambda_name = @lambda_name
+      end
+    end
+
+    it 'uses the name in the lambda function name' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(
+                :function_name,
+                "#{component}-#{deployment_identifier}-#{@lambda_name}"))
+    end
+
+    it 'uses the name in the lambda description' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(
+                :description,
+                "Lambda function with name: #{@lambda_name} for component: " \
+                  "#{component} and deployment identifier: " \
+                  "#{deployment_identifier}."))
+    end
+  end
+
+  describe 'when lambda function name provided' do
+    before(:context) do
+      @lambda_function_name =
+        "my-lambda-#{var(role: :root, name: 'deployment_identifier')}"
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = 'handler.hello'
+
+        vars.lambda_function_name = @lambda_function_name
+      end
+    end
+
+    it 'uses the provided lambda function name' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(
+                :function_name,
+                @lambda_function_name))
+    end
+  end
+
+  describe 'when lambda description provided' do
+    before(:context) do
+      @lambda_description = "My special lambda"
+      @plan = plan(role: :root) do |vars|
+        vars.lambda_zip_path = 'lambda.zip'
+        vars.lambda_handler = 'handler.hello'
+
+        vars.lambda_description = @lambda_description
+      end
+    end
+
+    it 'uses the provided lambda description' do
+      expect(@plan)
+        .to(include_resource_creation(type: 'aws_lambda_function')
+              .with_attribute_value(
+                :description,
+                @lambda_description))
     end
   end
 

@@ -6,25 +6,34 @@ variable "region" {
 }
 
 variable "component" {
-  description = "The name of the component or service"
+  description = "The name of the component or service this lambda is for."
   type        = string
 }
 
 variable "deployment_identifier" {
-  description = "An identifier for this instantiation e.g. <deployment_type>-<deployment_label>"
+  description = "An identifier for this instantiation e.g., <deployment_type>-<deployment_label>."
   type        = string
 }
 
 # Lambda Settings
 
-variable "lambda_function_name" {
-  description = "The name to use for the lambda function"
+variable "lambda_name" {
+  description = "The name of this lambda within the component or service. Used in default lambda function naming and log group naming."
   type        = string
+  default     = "default"
+  nullable    = false
+}
+
+variable "lambda_function_name" {
+  description = "The name to use for the lambda function."
+  type        = string
+  default     = null
 }
 
 variable "lambda_description" {
-  description = "The description to use for the AWS Lambda"
+  description = "The description to use for the AWS Lambda."
   type        = string
+  default     = null
 }
 
 variable "lambda_package_type" {
@@ -55,7 +64,7 @@ variable "lambda_runtime" {
 
 variable "lambda_architectures" {
   description = "The architectures to use for the lambda function"
-  type        = list(string)
+  type = list(string)
   default     = null
 }
 
@@ -68,14 +77,14 @@ variable "lambda_image_uri" {
 variable "lambda_image_config" {
   description = "Container image configuration values that override the values in the container image Dockerfile."
   type = object({
-    command: optional(list(string)),
-    entry_point: optional(list(string)),
-    working_directory: optional(string)
+    command : optional(list(string)),
+    entry_point : optional(list(string)),
+    working_directory : optional(string)
   })
   default = {
-    command: null,
-    entry_point: null,
-    working_directory: null
+    command : null,
+    entry_point : null,
+    working_directory : null
   }
   nullable = false
 }
@@ -83,10 +92,10 @@ variable "lambda_image_config" {
 variable "lambda_logging_config" {
   description = "Advanced logging configuration for the lambda"
   type = object({
-    log_format: string,
-    log_group: optional(string)
-    application_log_level: optional(string),
-    system_log_level: optional(string)
+    log_format : string,
+    log_group : optional(string)
+    application_log_level : optional(string),
+    system_log_level : optional(string)
   })
   default = null
 }
@@ -94,7 +103,7 @@ variable "lambda_logging_config" {
 variable "lambda_tracing_config" {
   description = "Tracing configuration for the lambda"
   type = object({
-    mode: string,
+    mode : string,
   })
   default = null
 }
@@ -140,14 +149,14 @@ variable "lambda_assume_role_policy_document" {
 
 variable "lambda_environment_variables" {
   description = "Environment variables to be provided to the lambda function."
-  type        = map(string)
+  type = map(string)
   default     = null
 }
 
 variable "tags" {
   description = "AWS tags to use on created infrastructure components"
-  type        = map(string)
-  default     = {}
+  type = map(string)
+  default = {}
   nullable    = false
 }
 
@@ -169,23 +178,23 @@ variable "include_lambda_log_group" {
 
 variable "include_execution_role_policy_vpc_access_management_statement" {
   description = "Whether or not to include a execution role policy statement to allow network management for VPC access. Defaults to `true`."
-  type = bool
-  default = true
-  nullable = false
+  type        = bool
+  default     = true
+  nullable    = false
 }
 
 variable "include_execution_role_policy_log_management_statement" {
   description = "Whether or not to include a execution role policy statement to allow log management for lambda logging. Defaults to `true`."
-  type = bool
-  default = true
-  nullable = false
+  type        = bool
+  default     = true
+  nullable    = false
 }
 
 variable "include_execution_role_policy_tracing_statement" {
   description = "Whether or not to include a execution role policy statement to allow lambda tracing. Defaults to `true`."
-  type = bool
-  default = true
-  nullable = false
+  type        = bool
+  default     = true
+  nullable    = false
 }
 
 variable "publish" {
@@ -206,21 +215,21 @@ variable "vpc_id" {
 
 variable "lambda_subnet_ids" {
   description = "The IDs of the subnets for the lambda"
-  type        = list(string)
-  default     = []
+  type = list(string)
+  default = []
   nullable    = false
 }
 
 variable "lambda_ingress_cidr_blocks" {
   description = "The ingress CIDR ranges to allow access"
-  type        = list(string)
-  default     = []
+  type = list(string)
+  default = []
   nullable    = false
 }
 
 variable "lambda_egress_cidr_blocks" {
   description = "The egress CIDR ranges to allow access"
-  type        = list(string)
-  default     = []
+  type = list(string)
+  default = []
   nullable    = false
 }

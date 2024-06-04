@@ -6,8 +6,16 @@ variable "vpc_id" {
   default = null
 }
 
-variable "lambda_function_name" {}
-variable "lambda_description" {}
+variable "lambda_name" {
+  default = null
+}
+
+variable "lambda_function_name" {
+  default = null
+}
+variable "lambda_description" {
+  default = null
+}
 
 variable "lambda_package_type" {
   default = null
