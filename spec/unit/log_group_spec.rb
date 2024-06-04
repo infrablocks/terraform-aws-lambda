@@ -38,7 +38,8 @@ describe 'log_group' do
         .to(include_resource_creation(type: 'aws_cloudwatch_log_group')
               .with_attribute_value(
                 :name,
-                "/#{component}/#{deployment_identifier}/lambda/default"))
+                "/#{component}/#{deployment_identifier}/lambda/default"
+              ))
     end
   end
 
@@ -77,7 +78,8 @@ describe 'log_group' do
         .to(include_resource_creation(type: 'aws_cloudwatch_log_group')
               .with_attribute_value(
                 :name,
-                "/#{component}/#{deployment_identifier}/lambda/default"))
+                "/#{component}/#{deployment_identifier}/lambda/default"
+              ))
     end
   end
 
@@ -97,7 +99,8 @@ describe 'log_group' do
         .to(include_resource_creation(type: 'aws_cloudwatch_log_group')
               .with_attribute_value(
                 :name,
-                "/#{component}/#{deployment_identifier}/lambda/#{@lambda_name}"))
+                "/#{component}/#{deployment_identifier}/lambda/#{@lambda_name}"
+              ))
     end
   end
 end

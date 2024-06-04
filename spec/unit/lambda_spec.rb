@@ -41,7 +41,8 @@ describe 'lambda' do
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(
                 :function_name,
-                "#{component}-#{deployment_identifier}-default"))
+                "#{component}-#{deployment_identifier}-default"
+              ))
     end
 
     it 'generates a default lambda description' do
@@ -49,9 +50,10 @@ describe 'lambda' do
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(
                 :description,
-                "Lambda function with name: default for component: " \
-                  "#{component} and deployment identifier: " \
-                  "#{deployment_identifier}."))
+                'Lambda function with name: default for component: ' \
+                "#{component} and deployment identifier: " \
+                "#{deployment_identifier}."
+              ))
     end
 
     it 'uses a package type of "Zip"' do
@@ -276,7 +278,8 @@ describe 'lambda' do
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(
                 :function_name,
-                "#{component}-#{deployment_identifier}-#{@lambda_name}"))
+                "#{component}-#{deployment_identifier}-#{@lambda_name}"
+              ))
     end
 
     it 'uses the name in the lambda description' do
@@ -285,8 +288,9 @@ describe 'lambda' do
               .with_attribute_value(
                 :description,
                 "Lambda function with name: #{@lambda_name} for component: " \
-                  "#{component} and deployment identifier: " \
-                  "#{deployment_identifier}."))
+                "#{component} and deployment identifier: " \
+                "#{deployment_identifier}."
+              ))
     end
   end
 
@@ -307,13 +311,14 @@ describe 'lambda' do
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(
                 :function_name,
-                @lambda_function_name))
+                @lambda_function_name
+              ))
     end
   end
 
   describe 'when lambda description provided' do
     before(:context) do
-      @lambda_description = "My special lambda"
+      @lambda_description = 'My special lambda'
       @plan = plan(role: :root) do |vars|
         vars.lambda_zip_path = 'lambda.zip'
         vars.lambda_handler = 'handler.hello'
@@ -327,7 +332,8 @@ describe 'lambda' do
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(
                 :description,
-                @lambda_description))
+                @lambda_description
+              ))
     end
   end
 
