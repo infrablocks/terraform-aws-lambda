@@ -161,7 +161,7 @@ describe 'lambda' do
         .to(include_resource_creation(type: 'aws_lambda_function')
               .with_attribute_value(
                 [:logging_config, 0, :log_group],
-                a_non_nil_value
+                "/#{component}/#{deployment_identifier}/lambda/default"
               ))
     end
 
@@ -766,54 +766,104 @@ describe 'lambda' do
   end
 
   describe 'when logging configuration provided' do
-    before(:context) do
-      @log_group_name = output(role: :prerequisites, name: 'log_group_name')
-      @plan = plan(role: :root) do |vars|
-        vars.lambda_zip_path = 'lambda.zip'
-        vars.lambda_handler = 'handler.hello'
-        vars.lambda_logging_config = {
-          log_format: 'JSON',
-          log_group: @log_group_name,
-          application_log_level: 'INFO',
-          system_log_level: 'DEBUG'
-        }
+    describe 'when optional attributes included' do
+      before(:context) do
+        @log_group_name = output(role: :prerequisites, name: 'log_group_name')
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+          vars.lambda_logging_config = {
+            log_format: 'JSON',
+            log_group: @log_group_name,
+            application_log_level: 'INFO',
+            system_log_level: 'DEBUG'
+          }
+        end
+      end
+
+      it 'uses the provided log format' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:logging_config, 0, :log_format],
+                  'JSON'
+                ))
+      end
+
+      it 'uses the provided log group' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:logging_config, 0, :log_group],
+                  @log_group_name
+                ))
+      end
+
+      it 'uses the provided application log level' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:logging_config, 0, :application_log_level],
+                  'INFO'
+                ))
+      end
+
+      it 'uses the provided system log level' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:logging_config, 0, :system_log_level],
+                  'DEBUG'
+                ))
       end
     end
 
-    it 'uses the provided log format' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(
-                [:logging_config, 0, :log_format],
-                'JSON'
-              ))
-    end
+    describe 'when optional attributes not included' do
+      before(:context) do
+        @plan = plan(role: :root) do |vars|
+          vars.lambda_zip_path = 'lambda.zip'
+          vars.lambda_handler = 'handler.hello'
+          vars.lambda_logging_config = {
+            log_format: 'JSON',
+          }
+        end
+      end
 
-    it 'uses the provided log group' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(
-                [:logging_config, 0, :log_group],
-                @log_group_name
-              ))
-    end
+      it 'uses the provided log format' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:logging_config, 0, :log_format],
+                  'JSON'
+                ))
+      end
 
-    it 'uses the provided application log level' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(
-                [:logging_config, 0, :application_log_level],
-                'INFO'
-              ))
-    end
+      it 'uses the name of the module managed log group' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:logging_config, 0, :log_group],
+                  "/#{component}/#{deployment_identifier}/lambda/default"
+                ))
+      end
 
-    it 'uses the provided system log level' do
-      expect(@plan)
-        .to(include_resource_creation(type: 'aws_lambda_function')
-              .with_attribute_value(
-                [:logging_config, 0, :system_log_level],
-                'DEBUG'
-              ))
+      it 'uses a null application log level' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:logging_config, 0, :application_log_level],
+                  a_nil_value
+                ))
+      end
+
+      it 'uses a null system log level' do
+        expect(@plan)
+          .to(include_resource_creation(type: 'aws_lambda_function')
+                .with_attribute_value(
+                  [:logging_config, 0, :system_log_level],
+                  a_nil_value
+                ))
+      end
     end
   end
 

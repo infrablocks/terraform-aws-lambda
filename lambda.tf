@@ -25,10 +25,10 @@ resource "aws_lambda_function" "lambda" {
   }
 
   logging_config {
-    log_format            = var.lambda_logging_config != null ? var.lambda_logging_config.log_format : "Text"
-    log_group             = var.lambda_logging_config != null ? var.lambda_logging_config.log_group : var.include_lambda_log_group == true ? aws_cloudwatch_log_group.lambda["default"].name : null
-    application_log_level = var.lambda_logging_config != null ? var.lambda_logging_config.application_log_level : null
-    system_log_level      = var.lambda_logging_config != null ? var.lambda_logging_config.system_log_level: null
+    log_format            = try(var.lambda_logging_config.log_format, "Text")
+    log_group             = try(var.lambda_logging_config.log_group, null) != null ? var.lambda_logging_config.log_group : (var.include_lambda_log_group == true ? aws_cloudwatch_log_group.lambda["default"].name : null)
+    application_log_level = try(var.lambda_logging_config.application_log_level, null)
+    system_log_level      = try(var.lambda_logging_config.system_log_level, null)
   }
 
   dynamic "tracing_config" {
