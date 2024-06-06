@@ -824,7 +824,7 @@ describe 'lambda' do
           vars.lambda_zip_path = 'lambda.zip'
           vars.lambda_handler = 'handler.hello'
           vars.lambda_logging_config = {
-            log_format: 'JSON',
+            log_format: 'JSON'
           }
         end
       end
